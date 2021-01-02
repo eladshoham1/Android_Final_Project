@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Running</string>
+
+    <string name="google_maps_key">AIzaSyBeDIuVXO-RhHKVqZ1PyxGAdkzr0F6a9LA</string>
+
+    <string name="main_run">Run</string>
+    <string name="main_profile">Profile</string>
+    <string name="main_friends">Friends</string>
+    <string name="main_history">History</string>
+    <string name="main_achievements">Achievements</string>
+    <string name="main_settings">Settings</string>
+
+</resources>
