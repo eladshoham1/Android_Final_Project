@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="phone_number">מספר טלפון</string>
+    <string name="enter_code">הכנס קוד</string>
+    <string name="ok_">אישור</string>
+    <string name="continue_">המשך</string>
+    <string name="login">התחבר</string>
+    <string name="cancel" translatable="false">ביטול</string>
+
+    <string name="profile">פרופיל</string>
+    <string name="friends">חברים</string>
+    <string name="running">ריצה</string>
+    <string name="progress">תהליך</string>
+    <string name="settings">הגדרות</string>
+    <string name="edit_profile">ערוך פרופיל</string>
+
+    <string name="first_name">שם פרטי</string>
+    <string name="last_name">שם משפחה</string>
+    <string name="age">גיל</string>
+    <string name="birth_date">תאריך לידה</string>
+    <string name="height">גובה (סמ)</string>
+    <string name="weight">משקל (קג)</string>
+    <string name="save_changes">שמור</string>
+
+    <string name="distance">מרחק (קמ)</string>
+    <string name="speed">מהירות (קמש)</string>
+    <string name="calories">קלוריות</string>
+    <string name="run">התחל</string>
+    <string name="start">התחל</string>
+    <string name="pause">השהה</string>
+    <string name="stop">עצור</string>
+
+</resources>

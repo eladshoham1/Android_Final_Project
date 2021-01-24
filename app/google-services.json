@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "797548145950",
+    "project_id": "run-tracker-app-74976",
+    "storage_bucket": "run-tracker-app-74976.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:797548145950:android:b23094ff0991663818ed0f",
+        "android_client_info": {
+          "package_name": "com.example.run_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "797548145950-tsd4ap01pvj7og7tr93dqn3139h2o097.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJINgv00WiYV7BlOorJsXEVbZcDLsp4bY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "797548145950-tsd4ap01pvj7og7tr93dqn3139h2o097.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

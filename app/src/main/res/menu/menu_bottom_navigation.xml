@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_LBL_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/profile"/>
+    <item
+        android:id="@+id/menu_LBL_friends"
+        android:enabled="true"
+        android:icon="@drawable/ic_friends"
+        android:title="@string/friends"/>
+    <item
+        android:id="@+id/menu_LBL_activity"
+        android:enabled="true"
+        android:icon="@drawable/ic_activity"
+        android:title="@string/running"/>
+    <item
+        android:id="@+id/menu_LBL_progress"
+        android:enabled="true"
+        android:icon="@drawable/ic_progress"
+        android:title="@string/progress"/>
+</menu>

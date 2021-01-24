@@ -20,9 +20,9 @@ public class Activity_Base extends AppCompatActivity {
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
+        /*if (hasFocus) {
             MyScreenUtils.hideSystemUI2(this);
-        }
+        }*/
     }
 
     @Override

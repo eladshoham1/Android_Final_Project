@@ -1,54 +1,57 @@
-/*package com.example.final_project.Adapters;
+package com.example.final_project.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_project.R;
-import com.example.final_project.objects.History;
-import com.example.final_project.objects.Run;
+import com.example.final_project.objects.User;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
 
-public class Adapter_Friend extends RecyclerView.Adapter<Adapter_History.MyViewHolder> {
+import java.util.ArrayList;
 
-    private History history;
+public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHolder> {
+
+    private ArrayList<User> friends;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public Adapter_Friend(Context context, History history) {
+    public Adapter_Friend(Context context, ArrayList<User> friends) {
         this.mInflater = LayoutInflater.from(context);
-        this.history = history;
+        this.friends = friends;
     }
 
     // inflates the row layout from xml when needed
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.list_record, parent, false);
+        View view = mInflater.inflate(R.layout.list_friends, parent, false);
         return new MyViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        Run run = history.getAllRuns().get(position);
-        //gliad for the map pic holder.history_IMG_runMap;
-        holder.record_LBL_name.setText(record.getName());
-        holder.record_LBL_date.setText(record.getDateByFormat());
-        holder.record_LBL_score.setText("" + record.getScore());
+        User friend = friends.get(position);
+        //holder.friends_IMG_picture = friend.getPicture();
+        holder.friends_LBL_userName.setText(friend.getFirstName() + " " + friend.getLastName());
+        holder.friends_LBL_age.setText("" + friend.getAge());
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
-        return history.getAllRuns().size();
+        return friends.size();
     }
 
     // convenience method for getting data at click position
-    public Run getItem(int id) {
-        return history.getAllRuns().get(id);
+    public User getItem(int id) {
+        return friends.get(id);
     }
 
     // allows clicks events to be caught
@@ -63,17 +66,17 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_History.MyViewH
 
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView record_LBL_rank;
-        TextView record_LBL_name;
-        TextView record_LBL_date;
-        TextView record_LBL_score;
+        ShapeableImageView friends_IMG_picture;
+        TextView friends_LBL_userName;
+        TextView friends_LBL_age;
+        MaterialButton post_BTN_sendRequest;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            record_LBL_rank = itemView.findViewById(R.id.record_LBL_rank);
-            record_LBL_name = itemView.findViewById(R.id.record_LBL_name);
-            record_LBL_date = itemView.findViewById(R.id.record_LBL_date);
-            record_LBL_score = itemView.findViewById(R.id.record_LBL_score);
+            friends_IMG_picture = itemView.findViewById(R.id.friends_IMG_picture);
+            friends_LBL_userName = itemView.findViewById(R.id.friends_LBL_userName);
+            friends_LBL_age = itemView.findViewById(R.id.friends_LBL_age);
+            post_BTN_sendRequest = itemView.findViewById(R.id.post_BTN_sendRequest);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,4 +88,4 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_History.MyViewH
             });
         }
     }
-}*/
+}

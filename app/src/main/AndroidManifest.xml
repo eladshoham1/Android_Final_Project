@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.final_project">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -15,20 +17,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activities.Activity_Competition" />
-        <activity android:name=".activities.Activity_Achievements" />
-        <activity android:name=".activities.Activity_History" />
-        <activity android:name=".activities.Activity_Running" />
-        <activity android:name=".activities.Activity_Friends" />
-        <activity android:name=".activities.Activity_Profile" />
-        <activity android:name=".activities.Activity_Base" />
-        <activity android:name=".activities.Activity_Main">
+        <activity android:name=".activities.Activity_Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.Activity_Base"/>
+        <activity android:name=".activities.Activity_Login"/>
+        <activity android:name=".activities.Activity_Menu"/>
+        <activity android:name=".activities.Activity_Competition"/>
     </application>
 
 </manifest>

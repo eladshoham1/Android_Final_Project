@@ -1,59 +1,90 @@
 package com.example.final_project.objects;
 
 public class Run {
+    private String rid = "";
     private long startTime = 0;
-    private long endTime = 0;
-    private double distance = 0;
-    private double maxSpeed = 0;
-    private double averageSpeed = 0;
+    private long duration = 0;
+    private double distance = 0.0;
+    private double averageSpeed = 0.0;
+    private double maxSpeed = 0.0;
+    private double calories = 0.0;
 
     public Run() {}
 
-    public Run(long startTime, long endTime, double distance, double maxSpeed, double averageSpeed) {
+    public Run(String rid, long startTime, long duration, double distance, double averageSpeed, double maxSpeed, double calories) {
+        this.rid = rid;
         this.startTime = startTime;
-        this.endTime = endTime;
+        this.duration = duration;
         this.distance = distance;
-        this.maxSpeed = maxSpeed;
         this.averageSpeed = averageSpeed;
+        this.maxSpeed = maxSpeed;
+        this.calories = calories;
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public Run setRid(String rid) {
+        this.rid = rid;
+        return this;
     }
 
     public long getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(long startTime) {
+    public Run setStartTime(long startTime) {
         this.startTime = startTime;
+        return this;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public Run setDuration(long duration) {
+        this.duration = duration;
+        return this;
     }
 
     public long getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
+        return this.startTime + this.duration;
     }
 
     public double getDistance() {
         return distance;
     }
 
-    public void setDistance(double distance) {
+    public Run setDistance(double distance) {
         this.distance = distance;
-    }
-
-    public double getMaxSpeed() {
-        return maxSpeed;
-    }
-
-    public void setMaxSpeed(double maxSpeed) {
-        this.maxSpeed = maxSpeed;
+        return this;
     }
 
     public double getAverageSpeed() {
         return averageSpeed;
     }
 
-    public void setAverageSpeed(double averageSpeed) {
+    public Run setAverageSpeed(double averageSpeed) {
         this.averageSpeed = averageSpeed;
+        return this;
+    }
+
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public Run setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+        return this;
+    }
+
+    public double getCalories() {
+        return calories;
+    }
+
+    public Run setCalories(double calories) {
+        this.calories = calories;
+        return this;
     }
 }
