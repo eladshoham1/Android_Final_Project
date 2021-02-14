@@ -13,6 +13,9 @@ import android.widget.TextView;
 
 import com.example.final_project.R;
 import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MySP;
+import com.example.final_project.utils.database.MyDB;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
 
@@ -38,7 +44,7 @@ public class Fragment_Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         findViews(view);
-        getUserData();
+        initViews();
 
         return view;
     }
@@ -53,33 +59,20 @@ public class Fragment_Profile extends Fragment {
         profile_LBL_weight = view.findViewById(R.id.profile_LBL_weight);
     }
 
-    private void getUserData() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+    private void initViews() {
+        user = MyDB.getInstance().getUserData();
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
-
-        myRef.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                initViews((User)dataSnapshot.getValue(User.class));
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                Log.d("pttt", "Failed to read value.", error.toException());
-            }
-        });
-    }
-
-    private void initViews(User user) {
         //profile_IMG_picture.setImageResource(user.getPicture());
         profile_LBL_userName.setText(user.getFirstName() + " " + user.getLastName());
         profile_LBL_age.setText("" + user.getAge());
         profile_LBL_bmi.setText(new DecimalFormat("##.##").format(user.getBmi()));
         profile_LBL_height.setText("" + user.getHeight());
         profile_LBL_weight.setText("" + user.getWeight());
+    }
 
+    private void showProfilePicture() {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageRef = storage.getReference();
+        StorageReference imagesRef = storageRef.child("images");
     }
 }

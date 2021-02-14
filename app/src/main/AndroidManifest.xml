@@ -12,23 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_Project">
+        <activity android:name=".activities.Activity_Create_User"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".activities.Activity_Splash">
+        <activity
+            android:name=".activities.Activity_Splash"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.Activity_Base"/>
-        <activity android:name=".activities.Activity_Login"/>
-        <activity android:name=".activities.Activity_Menu"/>
-        <activity android:name=".activities.Activity_Competition"/>
+        <activity android:name=".activities.Activity_Base" />
+        <activity
+            android:name=".activities.Activity_Login"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activities.Activity_Menu"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
     </application>
 
 </manifest>

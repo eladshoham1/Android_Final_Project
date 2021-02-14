@@ -22,6 +22,16 @@
     <string name="weight">משקל (קג)</string>
     <string name="save_changes">שמור</string>
 
+    <string name="my_friends">החברים שלי</string>
+    <string name="my_friends_request">בקשות חברות ממני</string>
+    <string name="friends_request">בקשות חברות</string>
+    <string name="search_friends">חיפוש חברים</string>
+
+    <string name="compete">להתחרות</string>
+    <string name="accept">אשר</string>
+    <string name="reject">דחה</string>
+    <string name="send_request">שלח בקשה</string>
+
     <string name="distance">מרחק (קמ)</string>
     <string name="speed">מהירות (קמש)</string>
     <string name="calories">קלוריות</string>

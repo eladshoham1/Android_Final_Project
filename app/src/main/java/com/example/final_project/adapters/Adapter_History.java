@@ -11,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.final_project.R;
 import com.example.final_project.objects.Run;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyViewHolder> {
 
@@ -21,8 +23,10 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
 
     // data is passed into the constructor
     public Adapter_History(Context context, ArrayList<Run> allRuns) {
-        this.mInflater = LayoutInflater.from(context);
-        this.allRuns = allRuns;
+        if (context != null) {
+            this.mInflater = LayoutInflater.from(context);
+            this.allRuns = allRuns;
+        }
     }
 
     // inflates the row layout from xml when needed
@@ -37,8 +41,8 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Run run = allRuns.get(position);
 
-        holder.history_LBL_startTime.setText("" + run.getStartTime());
-        holder.history_LBL_endTime.setText("" + run.getEndTime());
+        holder.history_LBL_startTime.setText(new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(run.getStartTime())));
+        holder.history_LBL_endTime.setText(new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(run.getEndTime())));
         holder.history_LBL_duration.setText("" + run.getDuration());
         holder.history_LBL_distance.setText("" + run.getDistance());
         holder.history_LBL_averageSpeed.setText("" + run.getAverageSpeed());

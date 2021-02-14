@@ -2,7 +2,6 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="12dp"
@@ -16,8 +15,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="12dp"
-        tools:context=".MainActivity">
+        android:padding="12dp">
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/friends_IMG_picture"
@@ -34,29 +32,68 @@
             android:layout_alignTop="@+id/friends_IMG_picture"
             android:layout_marginStart="12dp"
             android:layout_toEndOf="@+id/friends_IMG_picture"
-            android:text="Israel Israel"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/friends_LBL_age"
+            android:id="@+id/friends_LBL_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/friends_LBL_userName"
             android:layout_alignStart="@id/friends_LBL_userName"
             android:layout_marginTop="4dp"
-            android:text="0"
             android:textColor="#989898"
             android:textSize="14sp" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/post_BTN_sendRequest"
+            android:id="@+id/friends_BTN_compete"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:text="Send Request"
+            android:visibility="gone"
+            android:text="@string/compete"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_cancelRequest"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            android:text="@string/cancel"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_acceptRequest"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/friends_BTN_rejectRequest"
+            android:visibility="gone"
+            android:text="@string/accept"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_rejectRequest"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            android:text="@string/reject"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_sendRequest"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:visibility="gone"
+            android:text="@string/send_request"
             android:textSize="12sp" />
 
     </RelativeLayout>

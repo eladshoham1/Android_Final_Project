@@ -1,6 +1,7 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
@@ -15,7 +16,11 @@ import com.example.final_project.fragments.Fragment_Profile;
 import com.example.final_project.fragments.Fragment_Progress;
 import com.example.final_project.fragments.Fragment_Running;
 import com.example.final_project.fragments.Fragment_Settings;
+import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.database.MyDB;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.gson.Gson;
 
 public class Activity_Menu extends Activity_Base {
     private BottomNavigationView main_NVG_bottomNavigation;

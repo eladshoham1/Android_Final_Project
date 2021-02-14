@@ -18,8 +18,8 @@ public class User {
     private double height = 0.0;
     private double weight = 0.0;
     private Address address = null;
-    private ArrayList<String> allFriends = null;
-    private ArrayList<String> allRuns = null;
+    private ArrayList<String> allFriends = new ArrayList<>();
+    private ArrayList<String> allRuns = new ArrayList<>();
 
     public User() { }
 

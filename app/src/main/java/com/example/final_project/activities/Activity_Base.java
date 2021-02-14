@@ -1,9 +1,11 @@
 package com.example.final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
+import com.example.final_project.R;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyScreenUtils;
 import com.example.final_project.utils.MySignal;

@@ -8,6 +8,7 @@ public class MySP {
     public interface KEYS {
         public static final String MY_SP = "MY_SP";
         public static final String SOUND_ENABLE = "SOUND_ENABLE";
+        public static final String USER_DATA = "USER_DATA";
     }
 
     private static MySP instance;

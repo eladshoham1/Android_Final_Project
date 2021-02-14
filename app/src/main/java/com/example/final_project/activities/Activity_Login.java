@@ -10,7 +10,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.example.final_project.R;
-import com.example.final_project.database.MyDB;
+import com.example.final_project.callbacks.Callback_UserData;
+import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MySP;
+import com.example.final_project.utils.MySignal;
+import com.example.final_project.utils.database.MyDB;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -24,6 +29,12 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
@@ -45,21 +56,12 @@ public class Activity_Login extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        if (MyDB.validateUser()) {
-            Intent myIntent = new Intent(this, Activity_Menu.class);
-            startActivity(myIntent);
-            finish();
-        }
-
         findViews();
         initViews();
         updateUI();
 
-
-
         main_EDT_phone.setError("Wrong number.");
     }
-
 
     private void continueClicked() {
         if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
@@ -94,7 +96,7 @@ public class Activity_Login extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(phoneInput)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(2L, TimeUnit.SECONDS)
                 .setActivity(this)
                 .setCallbacks(onVerificationStateChangedCallbacks)
                 .build();
@@ -159,7 +161,7 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void userSignedIn() {
-        Intent myIntent = new Intent(this, Activity_Menu.class);
+        Intent myIntent = new Intent(this, Activity_Create_User.class);
         startActivity(myIntent);
         finish();
     }
