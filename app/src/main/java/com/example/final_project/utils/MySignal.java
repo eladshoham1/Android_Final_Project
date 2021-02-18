@@ -1,8 +1,12 @@
 package com.example.final_project.utils;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 public class MySignal {
     private static MySignal instance;
@@ -22,6 +26,13 @@ public class MySignal {
         if (instance == null) {
             instance = new MySignal(appContext);
         }
+    }
+
+    public void loadPicture(String url, ImageView imageView) {
+        Glide.with(appContext)
+                .load(url)
+                .centerCrop()
+                .into(imageView);
     }
 
     public void playSound(int rawSound) {

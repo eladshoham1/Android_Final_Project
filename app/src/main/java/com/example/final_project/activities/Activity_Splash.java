@@ -1,18 +1,21 @@
 package com.example.final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import android.animation.Animator;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
 import com.example.final_project.R;
+import com.example.final_project.callbacks.CallBack_User;
+import com.example.final_project.fragments.user.Fragment_Edit_Profile;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.google.firebase.auth.FirebaseAuth;
@@ -42,31 +45,16 @@ public class Activity_Splash extends AppCompatActivity {
         splash_IMG_logo = findViewById(R.id.splash_IMG_logo);
     }
 
-    private void validateUser() {
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        if (firebaseUser != null) {
-            readUserData(firebaseUser.getUid());
-        } else {
-            startLogin();
-        }
-    }
-
-    private void readUserData(String uid) {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users");
-
-        myRef.child(uid).addValueEventListener(new ValueEventListener() {
+    private void readUserDate() {
+        MyDB.readUserData(new CallBack_User() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                User user = (User) dataSnapshot.getValue(User.class);
+            public void onUserReady(User user) {
                 startApp(user);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                startLogin();
+            public void onUserFailure(String msg) {
+                startApp(null);
             }
         });
     }
@@ -75,20 +63,13 @@ public class Activity_Splash extends AppCompatActivity {
         Intent myIntent;
 
         if (user != null) {
-            myIntent = new Intent(this, Activity_Menu.class);
+            myIntent = new Intent(getBaseContext(), Activity_Menu.class);
             MySP.getInstance().putString(MySP.KEYS.USER_DATA, new Gson().toJson(user));
         } else {
-            Log.d("check2", "here");
-            myIntent = new Intent(this, Activity_Create_User.class);
+            myIntent = new Intent(getBaseContext(), Activity_Login.class);
         }
 
         startActivity(myIntent);
-        finish();
-    }
-
-    private void startLogin() {
-        Intent intent = new Intent(getBaseContext(), Activity_Login.class);
-        startActivity(intent);
         finish();
     }
 
@@ -111,7 +92,7 @@ public class Activity_Splash extends AppCompatActivity {
 
                     @Override
                     public void onAnimationEnd(Animator animator) {
-                        validateUser();
+                        readUserDate();
                     }
 
                     @Override

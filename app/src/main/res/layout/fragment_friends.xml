@@ -5,59 +5,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_Friends"
+    tools:context=".fragments.friends.Fragment_Friends"
     android:orientation="vertical">
 
-    <LinearLayout
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/friends_LAY_tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:background="@color/purple_500"
+        app:tabTextColor="@color/white"
+        app:tabIndicatorColor="@color/white">
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/friends_BTN_myFriends"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="4dp"
-            app:strokeColor="@color/purple_500"
-            android:text="@string/my_friends" />
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/friends_TAB_friends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/friends" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/friends_BTN_myFriendsRequest"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="4dp"
-            app:strokeColor="@color/purple_500"
-            android:text="@string/my_friends_request" />
-
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/friends_BTN_friendsRequest"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="4dp"
-            app:strokeColor="@color/purple_500"
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/friends_TAB_friendsRequest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/friends_request" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/friends_BTN_searchFriends"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:layout_margin="4dp"
-            app:strokeColor="@color/purple_500"
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/friends_TAB_searchFriends"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/search_friends" />
 
-    </LinearLayout>
+    </com.google.android.material.tabs.TabLayout>
 
-    <FrameLayout
-        android:id="@+id/friends_FRG_selectedFragment"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/friends_VPA_selectedPage"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$scrollingViewBehavior" />/>
 
 </LinearLayout>

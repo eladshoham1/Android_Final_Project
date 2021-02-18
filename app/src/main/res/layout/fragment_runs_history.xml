@@ -4,12 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_My_Friends_Request">
+    tools:context=".fragments.achievements.Fragment_Runs_History">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friends_LST_myFriendsRequest"
+        android:id="@+id/runs_history_LST_allRuns"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_friends"/>
+        tools:listitem="@layout/list_running"/>
 
 </FrameLayout>

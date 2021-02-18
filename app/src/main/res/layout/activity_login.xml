@@ -8,31 +8,39 @@
     tools:context=".activities.Activity_Login"
     android:orientation="vertical"
     android:padding="32dp"
-    android:gravity="center_horizontal">
+    android:gravity="center_horizontal"
+    android:background="@color/white">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="38sp"
+        android:textStyle="bold"
+        android:text="@string/app_name" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/main_EDT_phone"
+        android:id="@+id/login_EDT_phone"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:hint="@string/phone_number"
-        app:placeholderText="+972 55 1234567"
-        >
+        app:placeholderText="+972 50 1111111">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:ems="10"
-            />
+            android:ems="10" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:id="@+id/main_BTN_continue"
+        android:id="@+id/login_BTN_continue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
         app:cornerRadius="50dp"
         app:strokeColor="@color/purple_500"
         android:text="@string/continue_" />

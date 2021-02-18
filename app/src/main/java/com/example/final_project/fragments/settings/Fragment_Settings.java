@@ -1,4 +1,4 @@
-package com.example.final_project.fragments;
+package com.example.final_project.fragments.settings;
 
 import android.os.Bundle;
 
@@ -16,16 +16,10 @@ public class Fragment_Settings extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         findViews(view);
-        initViews();
 
         return view;
     }
 
     private void findViews(View view) {
-
-    }
-
-    private void initViews() {
-
     }
 }

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_My_Friends">
+    tools:context=".fragments.friends.Fragment_My_Friends">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/friends_LST_allFriends"

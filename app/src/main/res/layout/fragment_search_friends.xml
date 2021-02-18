@@ -4,12 +4,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_Search_Friends">
+    tools:context=".fragments.friends.Fragment_Search_Friends">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friends_LST_searchFriends"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_friends"/>
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="14dp"
+            android:hint="@string/search_friends">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/friends_EDT_searchFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/friends_LST_searchFriends"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/list_friends"/>
+
+    </LinearLayout>
 
 </FrameLayout>

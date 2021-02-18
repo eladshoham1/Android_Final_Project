@@ -1,4 +1,4 @@
-package com.example.final_project.fragments;
+package com.example.final_project.fragments.running;
 
 import android.os.Bundle;
 
@@ -13,6 +13,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -37,7 +38,7 @@ public class Fragment_Map extends Fragment {
 
                 googleMap.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        latLng, 10
+                        latLng, 16
                 ));
                 googleMap.addMarker(markerOptions);
             }

@@ -1,22 +1,33 @@
 package com.example.final_project.objects;
 
 public class Run {
+    private String rid = "";
     private long startTime = 0;
     private long duration = 0;
     private double distance = 0.0;
     private double averageSpeed = 0.0;
     private double maxSpeed = 0.0;
-    private double calories = 0.0;
+    private int calories = 0;
 
     public Run() {}
 
-    public Run(long startTime, long duration, double distance, double averageSpeed, double maxSpeed, double calories) {
+    public Run(String rid, long startTime, long duration, double distance, double averageSpeed, double maxSpeed, int calories) {
+        this.rid = rid;
         this.startTime = startTime;
         this.duration = duration;
         this.distance = distance;
         this.averageSpeed = averageSpeed;
         this.maxSpeed = maxSpeed;
         this.calories = calories;
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public Run setRid(String rid) {
+        this.rid = rid;
+        return this;
     }
 
     public long getStartTime() {
@@ -35,10 +46,6 @@ public class Run {
     public Run setDuration(long duration) {
         this.duration = duration;
         return this;
-    }
-
-    public long getEndTime() {
-        return this.startTime + this.duration;
     }
 
     public double getDistance() {
@@ -68,11 +75,11 @@ public class Run {
         return this;
     }
 
-    public double getCalories() {
+    public int getCalories() {
         return calories;
     }
 
-    public Run setCalories(double calories) {
+    public Run setCalories(int calories) {
         this.calories = calories;
         return this;
     }

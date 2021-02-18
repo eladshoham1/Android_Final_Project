@@ -3,6 +3,10 @@
     package="com.example.final_project">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".App"
@@ -12,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_Project">
-        <activity android:name=".activities.Activity_Create_User"></activity>
+        <activity android:name=".activities.Activity_Verify_Phone"></activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -28,15 +32,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.Activity_Base" />
         <activity
             android:name=".activities.Activity_Login"
             android:launchMode="singleTask"
-            android:screenOrientation="locked" />
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.Activity_Menu"
             android:launchMode="singleTask"
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activities.Activity_Run_Details"
+            android:launchMode="singleTask"
             android:screenOrientation="locked" />
+        <activity
+            android:name=".activities.Activity_Create_User"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked"
+            android:windowSoftInputMode="adjustPan" />
+
+        <service android:name=".utils.LocationService" />
     </application>
 
 </manifest>

@@ -5,14 +5,24 @@
     <string name="ok_">אישור</string>
     <string name="continue_">המשך</string>
     <string name="login">התחבר</string>
-    <string name="cancel" translatable="false">ביטול</string>
+    <string name="cancel">ביטול</string>
+
+    <string name="delete">מחק</string>
 
     <string name="profile">פרופיל</string>
     <string name="friends">חברים</string>
     <string name="running">ריצה</string>
-    <string name="progress">תהליך</string>
+    <string name="achievements">הישגים</string>
     <string name="settings">הגדרות</string>
     <string name="edit_profile">ערוך פרופיל</string>
+    <string name="logout">התנתק</string>
+
+    <string name="navigation_drawer_open">פתח תפריט ניווט</string>
+    <string name="navigation_drawer_close">סגור תפריט ניווט</string>
+
+    <string name="name_error">חייב לא להיות ריק ומקסימום 12 תווים</string>
+    <string name="height_error">חייב להיות בין 100 ל250</string>
+    <string name="weight_error">חייב להיות בין 30 ל200</string>
 
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>
@@ -20,12 +30,28 @@
     <string name="birth_date">תאריך לידה</string>
     <string name="height">גובה (סמ)</string>
     <string name="weight">משקל (קג)</string>
+    <string name="duration">זמן</string>
+    <string name="average_time">זמן ממוצע</string>
+    <string name="max_time">זמן שיא</string>
+    <string name="average_speed">מהירות ממוצעת</string>
+    <string name="max_speed">מהירות שיא</string>
+    <string name="average_distance">מרחק ממוצע</string>
+    <string name="max_distance">מרחק שיא</string>
+    <string name="average_calories">ממוצע קלוריות</string>
+    <string name="max_calories">שיא קלוריות</string>
+    <string name="total_time">סהכ זמן</string>
+    <string name="total_distance">סהכ מרחק</string>
+    <string name="total_calories">סהכ קלוריות</string>
     <string name="save_changes">שמור</string>
 
-    <string name="my_friends">החברים שלי</string>
-    <string name="my_friends_request">בקשות חברות ממני</string>
-    <string name="friends_request">בקשות חברות</string>
-    <string name="search_friends">חיפוש חברים</string>
+    <string name="start_time">התחלה</string>
+    <string name="end_time">סוף</string>
+
+    <string name="friends_request">בקשות</string>
+    <string name="search_friends">חיפוש</string>
+
+    <string name="history">היסטוריה</string>
+    <string name="statistics">סטטיסטיקה</string>
 
     <string name="compete">להתחרות</string>
     <string name="accept">אשר</string>
@@ -39,5 +65,7 @@
     <string name="start">התחל</string>
     <string name="pause">השהה</string>
     <string name="stop">עצור</string>
+
+    <string name="kilometer">קמ</string>
 
 </resources>

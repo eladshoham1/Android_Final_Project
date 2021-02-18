@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.final_project.R;
 import com.example.final_project.objects.Run;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,12 +19,14 @@ import java.util.Date;
 public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyViewHolder> {
 
     private ArrayList<Run> allRuns;
+    private Context context;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
     public Adapter_History(Context context, ArrayList<Run> allRuns) {
         if (context != null) {
+            this.context = context;
             this.mInflater = LayoutInflater.from(context);
             this.allRuns = allRuns;
         }
@@ -41,19 +44,33 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Run run = allRuns.get(position);
 
-        holder.history_LBL_startTime.setText(new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(run.getStartTime())));
-        holder.history_LBL_endTime.setText(new SimpleDateFormat("HH:mm:ss dd/MM/yyyy").format(new Date(run.getEndTime())));
-        holder.history_LBL_duration.setText("" + run.getDuration());
-        holder.history_LBL_distance.setText("" + run.getDistance());
-        holder.history_LBL_averageSpeed.setText("" + run.getAverageSpeed());
-        holder.history_LBL_maxSpeed.setText("" + run.getMaxSpeed());
-        holder.history_LBL_calories.setText("" + run.getCalories());
+        holder.history_LBL_date.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(run.getStartTime())));
+        holder.history_LBL_duration.setText(getStringDuration(run.getDuration()));
+        holder.history_LBL_distance.setText(new DecimalFormat("##.##").format(run.getDistance()) + " " + context.getResources().getString(R.string.kilometer));
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
         return allRuns.size();
+    }
+
+    public String getStringDuration(long duration) {
+        long second, minutes, hours;
+        StringBuilder strDuration = new StringBuilder();
+
+        second = duration / 1000;
+        minutes = second / 60;
+        hours = minutes / 60;
+        second %= 60;
+        minutes %= 60;
+        hours %= 24;
+
+        strDuration.append(hours < 10 ? "0" : "").append(hours).append(":");
+        strDuration.append(minutes < 10 ? "0" : "").append(minutes).append(":");
+        strDuration.append(second < 10 ? "0" : "").append(second);
+
+        return strDuration.toString();
     }
 
     // convenience method for getting data at click position
@@ -73,23 +90,15 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
 
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView history_LBL_startTime;
-        TextView history_LBL_endTime;
+        TextView history_LBL_date;
         TextView history_LBL_duration;
         TextView history_LBL_distance;
-        TextView history_LBL_averageSpeed;
-        TextView history_LBL_maxSpeed;
-        TextView history_LBL_calories;
 
         MyViewHolder(View itemView) {
             super(itemView);
-            history_LBL_startTime = itemView.findViewById(R.id.history_LBL_startTime);
-            history_LBL_endTime = itemView.findViewById(R.id.history_LBL_endTime);
+            history_LBL_date = itemView.findViewById(R.id.history_LBL_date);
             history_LBL_duration = itemView.findViewById(R.id.history_LBL_duration);
             history_LBL_distance = itemView.findViewById(R.id.history_LBL_distance);
-            history_LBL_averageSpeed = itemView.findViewById(R.id.history_LBL_averageSpeed);
-            history_LBL_maxSpeed = itemView.findViewById(R.id.history_LBL_maxSpeed);
-            history_LBL_calories = itemView.findViewById(R.id.history_LBL_calories);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -1,0 +1,424 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    tools:context=".fragments.achievements.Fragment_Statistics">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_averageTime"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_duration" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_averageTime"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_maxTime"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_duration" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_maxTime"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_totalTime"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_duration" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalTimeText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_totalTime"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_averageSpeed"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_average_speed" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageSpeedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_averageSpeed"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_speed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_maxSpeed"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_max_speed" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxSpeedText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_maxSpeed"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_speed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_averageDistance"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_distance" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageDistanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_averageDistance"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_maxDistance"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_distance" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxDistanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_maxDistance"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_totalDistance"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_distance" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalDistanceText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_totalDistance"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_averageCalories"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_calories" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageCaloriesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_averageCalories"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_averageCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_maxCalories"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_calories" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxCaloriesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_maxCalories"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_maxCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
+                android:id="@+id/statistics_IMG_totalCalories"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_calories" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalCaloriesText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_totalCalories"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_totalCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

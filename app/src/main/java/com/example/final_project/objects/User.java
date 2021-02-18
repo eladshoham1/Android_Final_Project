@@ -1,40 +1,30 @@
 package com.example.final_project.objects;
 
-import android.location.Address;
-import android.util.Log;
-import android.view.MenuItem;
-
-import java.lang.reflect.MalformedParameterizedTypeException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
+import java.util.Calendar;
 
 public class User {
     private String uid = "";
-    private long picture = 0;
     private String firstName = "";
     private String lastName = "";
     private String phone = "";
-    private long dateOfBirth = 0;
     private double height = 0.0;
     private double weight = 0.0;
-    private Address address = null;
-    private ArrayList<String> allFriends = new ArrayList<>();
-    private ArrayList<String> allRuns = new ArrayList<>();
+    private int birthYear = 0;
+    private int birthMonth = 0;
+    private int birthDay = 0;
 
     public User() { }
 
-    public User(String uid, long picture, String firstName, String lastName, String phone, long dateOfBirth, double height, double weight, Address address, ArrayList<String> allFriends, ArrayList<String> allRuns) {
+    public User(String uid, String firstName, String lastName, String phone, double height, double weight, int birthYear, int birthMonth, int birthDay) {
         this.uid = uid;
-        this.picture = picture;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
-        this.dateOfBirth = dateOfBirth;
         this.height = height;
         this.weight = weight;
-        this.address = address;
-        this.allFriends = allFriends;
-        this.allRuns = allRuns;
+        this.birthYear = birthYear;
+        this.birthMonth = birthMonth;
+        this.birthDay = birthDay;
     }
 
     public String getUid() {
@@ -43,15 +33,6 @@ public class User {
 
     public User setUid(String uid) {
         this.uid = uid;
-        return this;
-    }
-
-    public long getPicture() {
-        return picture;
-    }
-
-    public User setPicture(long picture) {
-        this.picture = picture;
         return this;
     }
 
@@ -82,21 +63,6 @@ public class User {
         return this;
     }
 
-    public long getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public User setDateOfBirth(long dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-        return this;
-    }
-
-    public long getAge() {
-        double age = (System.currentTimeMillis() - dateOfBirth) / 1000;
-        age /= 60 * 60 * 24 * 365;
-        return (int)age;
-    }
-
     public double getHeight() {
         return height;
     }
@@ -124,31 +90,49 @@ public class User {
         return bmi;
     }
 
-    public Address getAddress() {
-        return address;
+    public int getBirthYear() {
+        return birthYear;
     }
 
-    public User setAddress(Address address) {
-        this.address = address;
+    public User setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
         return this;
     }
 
-    public ArrayList<String> getAllFriends() {
-        return allFriends;
+    public int getBirthMonth() {
+        return birthMonth;
     }
 
-    public User setAllFriends(ArrayList<String> allFriends) {
-        this.allFriends = allFriends;
+    public User setBirthMonth(int birthMonth) {
+        this.birthMonth = birthMonth;
         return this;
     }
 
-    public ArrayList<String> getAllRuns() {
-        return allRuns;
+    public int getBirthDay() {
+        return birthDay;
     }
 
-    public User setAllRuns(ArrayList<String> allRuns) {
-        this.allRuns = allRuns;
+    public User setBirthDay(int birthDay) {
+        this.birthDay = birthDay;
         return this;
+    }
+
+    public int getAge() {
+        Calendar calenderToday = Calendar.getInstance();
+        int currentYear = calenderToday.get(Calendar.YEAR);
+        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
+        int age = currentYear - birthYear;
+
+        if (birthMonth > currentMonth) {
+            age--;
+        } else if (birthMonth == currentMonth) {
+            if (birthDay > todayDay){
+                age--;
+            }
+        }
+
+        return age;
     }
 
 }

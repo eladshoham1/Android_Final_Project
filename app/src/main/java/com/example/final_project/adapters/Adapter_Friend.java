@@ -1,19 +1,28 @@
 package com.example.final_project.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.final_project.R;
 import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHolder> {
 
@@ -25,6 +34,7 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
     }
 
     private ArrayList<User> friends;
+    private Context context;
     private LayoutInflater mInflater;
     private FRIENDS_STATE state;
     private ItemClickListener mClickListener;
@@ -32,7 +42,8 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
     // data is passed into the constructor
     public Adapter_Friend(Context context, ArrayList<User> friends, FRIENDS_STATE state) {
         if (context != null) {
-            this.mInflater = LayoutInflater.from(context);
+            this.context = context;
+            this.mInflater = LayoutInflater.from(this.context);
             this.friends = friends;
             this.state = state;
         }
@@ -49,13 +60,8 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User friend = friends.get(position);
-        /*holder.friends_IMG_picture = friend.getPicture();
-        Glide
-                .with(mInflater.getContext())
-                .load(post.getUserImageUrl())
-                .centerCrop()
-                .into(holder.post_IMG_user);*/
 
+        updateFriendPicture(friend, holder);
         holder.friends_LBL_userName.setText(friend.getFirstName() + " " + friend.getLastName());
         holder.friends_LBL_date.setText("" + friend.getAge());
 
@@ -74,6 +80,32 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
                 holder.friends_BTN_sendRequest.setVisibility(View.VISIBLE);
                 break;
         }
+    }
+
+    public void updateFriendPicture(User friend, MyViewHolder holder) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference storageReference = storage.getReference();
+        storageReference.child(Constants.IMAGES_DB + friend.getUid()).getDownloadUrl()
+                .addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        updateImage(uri.toString(), holder);
+                    }
+                });
+    }
+
+    private void updateImage(String url, MyViewHolder holder) {
+        Glide.with(context)
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.ic_profile)
+                .error(R.drawable.ic_profile)
+                .into(holder.friends_IMG_picture);
+    }
+
+    public void filterList(ArrayList<User> filteredList) {
+        friends = filteredList;
+        notifyDataSetChanged();
     }
 
     // total number of rows

@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.Fragment_Running_Details">
+    tools:context=".fragments.running.Fragment_Running_Details">
 
     <RelativeLayout
         android:layout_width="match_parent"

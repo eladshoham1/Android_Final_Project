@@ -1,5 +1,6 @@
-package com.example.final_project.fragments;
+package com.example.final_project.fragments.achievements;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,40 +12,43 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.final_project.R;
+import com.example.final_project.activities.Activity_Run_Details;
 import com.example.final_project.adapters.Adapter_History;
 import com.example.final_project.objects.Run;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
-import com.example.final_project.utils.database.MyDB;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class Fragment_Progress extends Fragment {
-    private RecyclerView progress_LST_allRuns;
+public class Fragment_Runs_History extends Fragment {
+    private RecyclerView runs_history_LST_allRuns;
     private User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_progress, container, false);
+        View view = inflater.inflate(R.layout.fragment_runs_history, container, false);
         findViews(view);
-        initViews();
+        initUser();
+        getAllRuns();
 
         return view;
     }
 
     private void findViews(View view) {
-        progress_LST_allRuns = view.findViewById(R.id.progress_LST_allRuns);
+        runs_history_LST_allRuns = view.findViewById(R.id.runs_history_LST_allRuns);
     }
 
-    private void initViews() {
-        user = MyDB.getInstance().getUserData();
-        getAllRuns();
+    private void initUser() {
+        String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
+        user = new Gson().fromJson(userString, User.class);
     }
 
     private void getAllRuns() {
@@ -57,6 +61,7 @@ public class Fragment_Progress extends Fragment {
                 ArrayList<Run> allRuns = new ArrayList<Run>();
                 for (DataSnapshot runSnapshot: dataSnapshot.getChildren()) {
                     Run run = runSnapshot.getValue(Run.class);
+                    run.setRid(runSnapshot.getKey());
                     allRuns.add(run);
                 }
 
@@ -71,14 +76,21 @@ public class Fragment_Progress extends Fragment {
     }
 
     private void showAllRuns(ArrayList<Run> allRuns) {
-        progress_LST_allRuns.setLayoutManager(new LinearLayoutManager(getContext()));
+        runs_history_LST_allRuns.setLayoutManager(new LinearLayoutManager(getContext()));
         Adapter_History adapter_history = new Adapter_History(getContext(), allRuns);
+        runs_history_LST_allRuns.setAdapter(adapter_history);
+
         adapter_history.setClickListener(new Adapter_History.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                MySignal.getInstance().toast("" + position);
+                openRunDetailsActivity(allRuns.get(position));
             }
         });
-        progress_LST_allRuns.setAdapter(adapter_history);
+    }
+
+    private void openRunDetailsActivity(Run run) {
+        Intent myIntent = new Intent(getContext(), Activity_Run_Details.class);
+        myIntent.putExtra(Constants.EXTRA_RUN_DETAILS, new Gson().toJson(run));
+        startActivity(myIntent);
     }
 }

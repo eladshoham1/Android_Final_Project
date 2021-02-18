@@ -1,79 +1,107 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.final_project.R;
-import com.example.final_project.fragments.Fragment_Edit_Profile;
-import com.example.final_project.fragments.Fragment_Friends;
-import com.example.final_project.fragments.Fragment_Profile;
-import com.example.final_project.fragments.Fragment_Progress;
-import com.example.final_project.fragments.Fragment_Running;
-import com.example.final_project.fragments.Fragment_Settings;
+import com.example.final_project.fragments.achievements.Fragment_Achievements;
+import com.example.final_project.fragments.friends.Fragment_Friends;
+import com.example.final_project.fragments.user.Fragment_Edit_Profile;
+import com.example.final_project.fragments.user.Fragment_Profile;
+import com.example.final_project.fragments.running.Fragment_Running;
+import com.example.final_project.fragments.settings.Fragment_Settings;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.Constants;
-import com.example.final_project.utils.database.MyDB;
+import com.example.final_project.utils.MySP;
+import com.example.final_project.utils.MySignal;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 
-public class Activity_Menu extends Activity_Base {
+public class Activity_Menu extends AppCompatActivity {
+    private DrawerLayout menu_LAY_drawerLayout;
+    private NavigationView menu_NAV_navigationDrawer;
     private BottomNavigationView main_NVG_bottomNavigation;
     private Fragment selectedFragment = null;
-    private Toolbar toolbar;
+    private Toolbar main_TLB_toolbar;
+
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
+        initUser();
         findViews();
         initViews();
+        navigationDrawer();
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_settings) {
-            updateTile(R.id.action_settings);
-            openSettingsPage();
-            return true;
-        } else if (id == R.id.action_editProfile) {
-            updateTile(R.id.action_editProfile);
-            openEditProfilePage();
-            return true;
+    public void onBackPressed() {
+        if (menu_LAY_drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            menu_LAY_drawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void openSettingsPage() {
-        initFragments(new Fragment_Settings());
-    }
-
-    private void openEditProfilePage() {
-        initFragments(new Fragment_Edit_Profile());
     }
 
     private void findViews() {
-        toolbar = findViewById(R.id.toolbar);
+        menu_LAY_drawerLayout = findViewById(R.id.menu_LAY_drawerLayout);
+        menu_NAV_navigationDrawer = findViewById(R.id.menu_NAV_navigationDrawer);
+        main_TLB_toolbar = findViewById(R.id.main_TLB_toolbar);
         main_NVG_bottomNavigation = findViewById(R.id.main_NVG_bottomNavigation);
     }
 
+    private void initUser() {
+        String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
+
+        if (!userString.isEmpty()) {
+            user = new Gson().fromJson(userString, User.class);
+        } else {
+            completeUserData();
+        }
+    }
+
+    private void completeUserData() {
+        Intent myIntent = new Intent(this, Activity_Create_User.class);
+        startActivity(myIntent);
+        finish();
+    }
+
+    private void navigationDrawer() {
+        menu_NAV_navigationDrawer.bringToFront();
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
+                menu_LAY_drawerLayout,
+                main_TLB_toolbar,
+                R.string.navigation_drawer_open,
+                R.string.navigation_drawer_close);
+
+        menu_LAY_drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        menu_NAV_navigationDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                menu_LAY_drawerLayout.closeDrawer(menu_NAV_navigationDrawer);
+                replaceFragment(item.getItemId());
+                return true;
+            }
+        });
+    }
+
     private void initViews() {
-        setSupportActionBar(toolbar);
+        setSupportActionBar(main_TLB_toolbar);
         updateTile(R.id.menu_LBL_profile);
         initFragments(new Fragment_Profile());
 
@@ -98,18 +126,39 @@ public class Activity_Menu extends Activity_Base {
                 itemId = R.id.menu_LBL_friends;
                 selectedFragment = new Fragment_Friends();
                 break;
-            case R.id.menu_LBL_activity:
-                itemId = R.id.menu_LBL_activity;
+            case R.id.menu_LBL_running:
+                itemId = R.id.menu_LBL_running;
                 selectedFragment = new Fragment_Running();
                 break;
-            case R.id.menu_LBL_progress:
-                itemId = R.id.menu_LBL_progress;
-                selectedFragment = new Fragment_Progress();
+            case R.id.menu_LBL_achievements:
+                itemId = R.id.menu_LBL_achievements;
+                selectedFragment = new Fragment_Achievements();
                 break;
+            case R.id.navigation_editProfile:
+                itemId = R.id.navigation_editProfile;
+                selectedFragment = new Fragment_Edit_Profile();
+                break;
+            case R.id.navigation_settings:
+                itemId = R.id.navigation_settings;
+                selectedFragment = new Fragment_Settings();
+                break;
+            case R.id.navigation_logout:
+                logOut();
+                return;
         }
 
         updateTile(itemId);
         initFragments(selectedFragment);
+    }
+
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        MySP.getInstance().removeKey(MySP.KEYS.USER_DATA);
+        MySP.getInstance().removeKey(MySP.KEYS.STATISTICS_DATA);
+
+        Intent myIntent = new Intent(this, Activity_Login.class);
+        startActivity(myIntent);
+        finish();
     }
 
     private void updateTile(int id) {
@@ -120,17 +169,17 @@ public class Activity_Menu extends Activity_Base {
             case R.id.menu_LBL_friends:
                 getSupportActionBar().setTitle(R.string.friends);
                 break;
-            case R.id.menu_LBL_activity:
+            case R.id.menu_LBL_running:
                 getSupportActionBar().setTitle(R.string.running);
                 break;
-            case R.id.menu_LBL_progress:
-                getSupportActionBar().setTitle(R.string.progress);
+            case R.id.menu_LBL_achievements:
+                getSupportActionBar().setTitle(R.string.achievements);
                 break;
-            case R.id.action_settings:
-                getSupportActionBar().setTitle(R.string.settings);
-                break;
-            case R.id.action_editProfile:
+            case R.id.navigation_editProfile:
                 getSupportActionBar().setTitle(R.string.edit_profile);
+                break;
+            case R.id.navigation_settings:
+                getSupportActionBar().setTitle(R.string.settings);
                 break;
         }
     }

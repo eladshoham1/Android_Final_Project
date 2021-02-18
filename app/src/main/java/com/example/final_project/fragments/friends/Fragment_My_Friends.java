@@ -1,12 +1,12 @@
-package com.example.final_project.fragments;
+package com.example.final_project.fragments.friends;
 
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,62 +15,68 @@ import com.example.final_project.R;
 import com.example.final_project.adapters.Adapter_Friend;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
-import com.example.final_project.utils.database.MyDB;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
-public class Fragment_Friends_Request extends Fragment {
-    private RecyclerView friends_LST_friendsRequest;
+public class Fragment_My_Friends extends Fragment {
+    private RecyclerView friends_LST_allFriends;
     private User user;
+    private ArrayList<String> allFriendsKeys;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_friends_request, container, false);
+        View view = inflater.inflate(R.layout.fragment_my_friends, container, false);
         findViews(view);
-        initViews();
+        initUser();
 
         return view;
     }
 
     private void findViews(View view) {
-        friends_LST_friendsRequest = view.findViewById(R.id.friends_LST_friendsRequest);
+        friends_LST_allFriends = view.findViewById(R.id.friends_LST_allFriends);
     }
 
-    private void initViews() {
-        user = MyDB.getInstance().getUserData();
+    private void initUser() {
+        String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
+        user = new Gson().fromJson(userString, User.class);
+
+        allFriendsKeys = new ArrayList<>();
         getAllFriendsKeys();
     }
 
     private void getAllFriendsKeys() {
-        ArrayList<String> allFriendsKeys = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
 
-        myRef.child(Constants.GET_REQUESTS_DB).child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        myRef.child(Constants.CURRENT_FRIENDS_DB).child(user.getUid()).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                allFriendsKeys.clear();
                 for (DataSnapshot friendSnapshot: dataSnapshot.getChildren()) {
                     String friendKey = friendSnapshot.getKey();
                     allFriendsKeys.add(friendKey);
                 }
 
-                getFriendsData(allFriendsKeys);
+                getFriendsData();
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                MySignal.getInstance().toast("Failed to read the friends request data");
+                MySignal.getInstance().toast("Failed to read the friends data");
             }
         });
     }
 
-    private void getFriendsData(ArrayList<String> allFriendsKeys) {
+    private void getFriendsData() {
         ArrayList<User> allFriends = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.USERS_DB);
@@ -94,8 +100,8 @@ public class Fragment_Friends_Request extends Fragment {
     }
 
     private void showAllFriends(ArrayList<User> allFriends) {
-        friends_LST_friendsRequest.setLayoutManager(new LinearLayoutManager(getContext()));
-        Adapter_Friend adapter_friend = new Adapter_Friend(getContext(), allFriends, Adapter_Friend.FRIENDS_STATE.FRIENDS_REQUEST);
+        friends_LST_allFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+        Adapter_Friend adapter_friend = new Adapter_Friend(getContext(), allFriends, Adapter_Friend.FRIENDS_STATE.MY_FRIENDS);
         adapter_friend.setClickListener(new Adapter_Friend.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -104,7 +110,7 @@ public class Fragment_Friends_Request extends Fragment {
 
             @Override
             public void onCompeteClick(int position) {
-
+                friendsCompetition(allFriends.get(position));
             }
 
             @Override
@@ -114,12 +120,12 @@ public class Fragment_Friends_Request extends Fragment {
 
             @Override
             public void onAcceptRequest(int position) {
-                acceptFriendRequest(allFriends.get(position));
+
             }
 
             @Override
             public void onRejectRequest(int position) {
-                rejectFriendRequest(allFriends.get(position));
+
             }
 
             @Override
@@ -127,17 +133,17 @@ public class Fragment_Friends_Request extends Fragment {
 
             }
         });
-        friends_LST_friendsRequest.setAdapter(adapter_friend);
+        friends_LST_allFriends.setAdapter(adapter_friend);
     }
 
     private void openFriendFragment(User theUser) {
         //TODO
     }
 
-    private void acceptFriendRequest(User theUser) {
+    private void friendsCompetition(User theUser) {
+        MySignal.getInstance().toast("You win"); //TODO
     }
 
-    private void rejectFriendRequest(User theUser) {
-    }
+    //TODO delete friends
 
 }
