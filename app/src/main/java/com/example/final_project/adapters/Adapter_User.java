@@ -1,0 +1,152 @@
+package com.example.final_project.adapters;
+
+import android.content.Context;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.final_project.R;
+import com.example.final_project.callbacks.CallBack_UserPicture;
+import com.example.final_project.objects.User;
+import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySignal;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.imageview.ShapeableImageView;
+
+import java.util.ArrayList;
+
+public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder> {
+
+    private ArrayList<User> allUsers;
+    private ArrayList<String> allMyFriendsRequestsKeys;
+    private LayoutInflater mInflater;
+    private ItemClickListener mClickListener;
+
+    // data is passed into the constructor
+    public Adapter_User(Context context, ArrayList<User> allUsers, ArrayList<String> allMyFriendsRequestsKeys) {
+        if (context != null) {
+            this.allUsers = allUsers;
+            this.allMyFriendsRequestsKeys = allMyFriendsRequestsKeys;
+            this.mInflater = LayoutInflater.from(context);
+        }
+    }
+
+    // inflates the row layout from xml when needed
+    @Override
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = mInflater.inflate(R.layout.list_users, parent, false);
+        return new MyViewHolder(view);
+    }
+
+    // binds the data to the TextView in each row
+    @Override
+    public void onBindViewHolder(MyViewHolder holder, int position) {
+        User user = allUsers.get(position);
+
+        updateUserPicture(user, holder);
+        holder.users_LBL_userName.setText(user.getFirstName() + " " + user.getLastName());
+
+        if (userInMyFriendsRequests(user.getUid())) {
+            holder.users_BTN_sendRequest.setVisibility(View.GONE);
+            holder.users_BTN_cancelRequest.setVisibility(View.VISIBLE);
+        } else {
+            holder.users_BTN_sendRequest.setVisibility(View.VISIBLE);
+            holder.users_BTN_cancelRequest.setVisibility(View.GONE);
+        }
+    }
+
+    public void updateUserPicture(User user, MyViewHolder holder) {
+        MyDB.readUserPicture(user.getUid(), new CallBack_UserPicture() {
+            @Override
+            public void onPictureReady(String urlString) {
+                MySignal.getInstance().loadPicture(urlString, holder.users_IMG_picture);
+            }
+        });
+    }
+
+    public void filterList(ArrayList<User> filteredList) {
+        allUsers = filteredList;
+        notifyDataSetChanged();
+    }
+
+    private boolean userInMyFriendsRequests(String uid) {
+        for (String userID : allMyFriendsRequestsKeys) {
+            Log.d("check2", userID);
+            if (userID.equals(uid)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    // total number of rows
+    @Override
+    public int getItemCount() {
+        return allUsers.size();
+    }
+
+    // convenience method for getting data at click position
+    public User getItem(int id) {
+        return allUsers.get(id);
+    }
+
+    // allows clicks events to be caught
+    public void setClickListener(ItemClickListener itemClickListener) {
+        this.mClickListener = itemClickListener;
+    }
+
+    // parent activity will implement this method to respond to click events
+    public interface ItemClickListener {
+        void onItemClick(View view, int position);
+        void onSendRequest(int position);
+        void onCancelRequest(int position);
+    }
+
+    // stores and recycles views as they are scrolled off screen
+    public class MyViewHolder extends RecyclerView.ViewHolder {
+        ShapeableImageView users_IMG_picture;
+        TextView users_LBL_userName;
+        MaterialButton users_BTN_sendRequest;
+        MaterialButton users_BTN_cancelRequest;
+
+        MyViewHolder(View itemView) {
+            super(itemView);
+            users_IMG_picture = itemView.findViewById(R.id.users_IMG_picture);
+            users_LBL_userName = itemView.findViewById(R.id.users_LBL_userName);
+            users_BTN_sendRequest = itemView.findViewById(R.id.users_BTN_sendRequest);
+            users_BTN_cancelRequest = itemView.findViewById(R.id.users_BTN_cancelRequest);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null) {
+                        mClickListener.onItemClick(v, getAdapterPosition());
+                    }
+                }
+            });
+
+            users_BTN_cancelRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null) {
+                        mClickListener.onCancelRequest(getAdapterPosition());
+                    }
+                }
+            });
+
+            users_BTN_sendRequest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (mClickListener != null) {
+                        mClickListener.onSendRequest(getAdapterPosition());
+                    }
+                }
+            });
+        }
+    }
+}

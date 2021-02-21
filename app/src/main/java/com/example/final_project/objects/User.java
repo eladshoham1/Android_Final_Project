@@ -81,7 +81,7 @@ public class User {
         return this;
     }
 
-    public double getBmi() {
+    public double getBMI() {
         double bmi = 0.0;
 
         if (height != 0)

@@ -3,19 +3,16 @@ package com.example.final_project.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
-import com.example.final_project.utils.MySignal;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -23,15 +20,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
@@ -45,6 +36,7 @@ public class Activity_Login extends AppCompatActivity {
 
     private TextInputLayout login_EDT_phone;
     private MaterialButton login_BTN_continue;
+    private ProgressBar login_PRB_loading;
 
     private LOGIN_STATE login_state = LOGIN_STATE.ENTERING_NUMBER;
     private String verificationId;
@@ -62,6 +54,7 @@ public class Activity_Login extends AppCompatActivity {
     private void findViews() {
         login_EDT_phone = findViewById(R.id.login_EDT_phone);
         login_BTN_continue = findViewById(R.id.login_BTN_continue);
+        login_PRB_loading = findViewById(R.id.login_PRB_loading);
     }
 
     private void initViews() {
@@ -74,6 +67,8 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void continueClicked() {
+        login_PRB_loading.setVisibility(View.VISIBLE);
+
         if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
             startLoginProcess();
         } else if (login_state == LOGIN_STATE.ENTERING_CODE) {
@@ -120,7 +115,8 @@ public class Activity_Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             readUserData();
                         } else {
-                            MySignal.getInstance().toast("Wrong Code");
+                            login_EDT_phone.setError("Wrong Code");
+                            login_EDT_phone.requestFocus();
                             updateUI();
                         }
                     }
@@ -128,7 +124,7 @@ public class Activity_Login extends AppCompatActivity {
     }
 
     private void readUserData() {
-        MyDB.readUserData(new CallBack_User() {
+        MyDB.readMyUserData(new CallBack_User() {
             @Override
             public void onUserReady(User user) {
                 startApp(user);
@@ -148,7 +144,7 @@ public class Activity_Login extends AppCompatActivity {
             myIntent = new Intent(this, Activity_Menu.class);
             MySP.getInstance().putString(MySP.KEYS.USER_DATA, new Gson().toJson(user));
         } else {
-            myIntent = new Intent(this, Activity_Create_User.class);
+            myIntent = new Intent(this, Activity_Edit_Profile.class);
         }
 
         startActivity(myIntent);
@@ -196,14 +192,17 @@ public class Activity_Login extends AppCompatActivity {
 
         @Override
         public void onVerificationFailed(FirebaseException e) {
-            MySignal.getInstance().toast(e.getMessage());
-            login_EDT_phone.setError("Wrong number");
+            login_EDT_phone.setError("Wrong Number");
+            login_EDT_phone.requestFocus();
             login_state = LOGIN_STATE.ENTERING_NUMBER;
             updateUI();
         }
     };
 
     private void updateUI() {
+        login_PRB_loading.setVisibility(View.GONE);
+        login_EDT_phone.setErrorEnabled(false);
+
         if (login_state == LOGIN_STATE.ENTERING_NUMBER) {
             login_EDT_phone.getEditText().setText("+972501111111");
             login_EDT_phone.setHint(getString(R.string.phone_number));
@@ -213,7 +212,6 @@ public class Activity_Login extends AppCompatActivity {
             login_EDT_phone.getEditText().setText("");
             login_EDT_phone.setHint(getString(R.string.enter_code));
             login_EDT_phone.setPlaceholderText("******");
-            login_EDT_phone.setErrorEnabled(false);
             login_BTN_continue.setText(getString(R.string.login));
         }
     }

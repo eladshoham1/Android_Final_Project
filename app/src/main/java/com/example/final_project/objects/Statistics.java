@@ -1,6 +1,9 @@
 package com.example.final_project.objects;
 
+import java.util.ArrayList;
+
 public class Statistics {
+    private int numOfRuns = 0;
     private long averageTime = 0L;
     private long maxTime = 0L;
     private long totalTime = 0L;
@@ -13,11 +16,11 @@ public class Statistics {
     private int averageCalories = 0;
     private int maxCalories = 0;
     private int totalCalories = 0;
-    private int numOfRuns = 0;
 
     public Statistics() { }
 
-    public Statistics(long averageTime, long maxTime, long totalTime, double averageDistance, double maxDistance, double totalDistance, double averageSpeed, double maxSpeed, double totalAverageSpeed, int averageCalories, int maxCalories, int totalCalories) {
+    public Statistics(int numOfRuns, long averageTime, long maxTime, long totalTime, double averageDistance, double maxDistance, double totalDistance, double averageSpeed, double maxSpeed, double totalAverageSpeed, int averageCalories, int maxCalories, int totalCalories) {
+        this.numOfRuns = numOfRuns;
         this.averageTime = averageTime;
         this.maxTime = maxTime;
         this.totalTime = totalTime;
@@ -30,6 +33,15 @@ public class Statistics {
         this.averageCalories = averageCalories;
         this.maxCalories = maxCalories;
         this.totalCalories = totalCalories;
+    }
+
+    public int getNumOfRuns() {
+        return numOfRuns;
+    }
+
+    public Statistics setNumOfRuns(int numOfRuns) {
+        this.numOfRuns = numOfRuns;
+        return this;
     }
 
     public long getAverageTime() {
@@ -140,58 +152,56 @@ public class Statistics {
         return this;
     }
 
-    public void addRun(Run run) {
-        this.numOfRuns++;
-        updateStatistics(run);
-    }
+    public void calculateStatistics(ArrayList<Run> allRuns) {
+        long time;
+        double speed, distance;
+        int calories;
+        setNumOfRuns(allRuns.size());
 
-    public void deleteRun(Run run) {
-        this.numOfRuns--;
-        updateStatistics(run);
-    }
-
-    private void updateStatistics(Run run) {
-        updateTime(run.getDuration());
-        updateSpeed(run.getAverageSpeed(), run.getMaxSpeed());
-        updateDistance(run.getDistance());
-        updateCalories(run.getCalories());
-    }
-
-    private void updateTime(long time) {
-        this.totalTime += time;
-        this.averageTime = this.totalTime / this.numOfRuns;
-
-        if (time > this.maxTime) {
-            this.maxTime = time;
+        if (this.numOfRuns == 0) {
+            return;
         }
+
+        for (Run run : allRuns) {
+            time = run.getDuration();
+            speed = run.getMaxSpeed();
+            distance = run.getDistance();
+            calories = run.getCalories();
+
+            this.totalTime += time;
+            this.totalDistance += distance;
+            this.totalCalories += calories;
+
+            updateMaxTime(time);
+            updateMaxSpeed(speed);
+            updateMaxDistance(distance);
+            updateMaxCalories(calories);
+        }
+
+        setAverageTime(this.totalTime / this.numOfRuns);
+        setAverageSpeed(this.totalDistance / (this.totalTime / (1000.0 * 60.0 * 60.0)));
+        setAverageDistance(this.totalDistance / this.numOfRuns);
+        setAverageCalories(this.totalCalories / this.numOfRuns);
     }
 
-    private void updateSpeed(double averageSpeed, double maxSpeed) {
-        this.averageSpeed *= (numOfRuns - 1);
-        this.averageSpeed += averageSpeed;
-        this.averageSpeed /= numOfRuns;
-
-        if (maxSpeed > this.maxSpeed) {
-            this.maxSpeed = maxSpeed;
-        }
+    private void updateMaxTime(long time) {
+        if (time > this.maxTime)
+            setMaxTime(time);
     }
 
-    private void updateDistance(double distance) {
-        this.totalDistance += distance;
-        this.averageDistance = this.totalDistance / this.numOfRuns;
-
-        if (distance > this.maxDistance) {
-            this.maxDistance = distance;
-        }
+    private void updateMaxSpeed(double speed) {
+        if (speed > this.maxSpeed)
+            setMaxSpeed(speed);
     }
 
-    private void updateCalories(int calories) {
-        this.totalCalories += calories;
-        this.averageCalories = this.totalCalories / this.numOfRuns;
+    private void updateMaxDistance(double distance) {
+        if (distance > this.maxDistance)
+            setMaxDistance(distance);
+    }
 
-        if (calories > this.maxCalories) {
-            this.maxCalories = calories;
-        }
+    private void updateMaxCalories(int calories) {
+        if (calories > this.maxCalories)
+            setMaxCalories(calories);
     }
 
 }

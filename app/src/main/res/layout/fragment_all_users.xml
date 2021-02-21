@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.friends.Fragment_Search_Friends">
+    tools:context=".fragments.friends.Fragment_All_Users">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,17 +19,17 @@
             android:hint="@string/search_friends">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/friends_EDT_searchFriends"
+                android:id="@+id/all_users_EDT_searchUsers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/friends_LST_searchFriends"
+            android:id="@+id/all_users_LST_allUsers"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:listitem="@layout/list_friends"/>
+            tools:listitem="@layout/list_users" />
 
     </LinearLayout>
 

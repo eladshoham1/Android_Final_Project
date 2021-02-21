@@ -1,16 +1,14 @@
 package com.example.final_project.utils;
 
 import android.net.Uri;
-import android.util.Log;
 
-import androidx.annotation.NonNull;
-
-import com.example.final_project.callbacks.CallBack_Statistics;
+import com.example.final_project.callbacks.CallBack_Runs;
+import com.example.final_project.callbacks.CallBack_Settings;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.callbacks.CallBack_UserPicture;
-import com.example.final_project.objects.Statistics;
+import com.example.final_project.objects.Run;
+import com.example.final_project.objects.Settings;
 import com.example.final_project.objects.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,6 +19,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.ArrayList;
 
 public class MyDB {
 
@@ -51,10 +51,13 @@ public class MyDB {
         return phoneNumber;
     }
 
-    public static void readUserData(CallBack_User callBack_user) {
+    public static void readMyUserData(CallBack_User callBack_user) {
+        readUserData(getUid(), callBack_user);
+    }
+
+    public static void readUserData(String uid, CallBack_User callBack_user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.USERS_DB);
-        String uid = getUid();
 
         if (uid.isEmpty()) {
             callBack_user.onUserFailure("User not exist");
@@ -70,15 +73,19 @@ public class MyDB {
 
             @Override
             public void onCancelled(DatabaseError error) {
-                callBack_user.onUserFailure("Fail to load your user");
+                callBack_user.onUserFailure("Fail to load user");
             }
         });
     }
 
-    public static void readUserPicture(CallBack_UserPicture callBack_userPicture) {
+    public static void readMyUserPicture(CallBack_UserPicture callBack_userPicture) {
+        readUserPicture(getUid(), callBack_userPicture);
+    }
+
+    public static void readUserPicture(String uid, CallBack_UserPicture callBack_userPicture) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageReference = storage.getReference();
-        StorageReference ref = storageReference.child(Constants.IMAGES_DB + getUid());
+        StorageReference ref = storageReference.child(Constants.IMAGES_DB + uid);
 
         ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -88,28 +95,76 @@ public class MyDB {
         });
     }
 
-    public static void readStatisticsData(CallBack_Statistics callBack_statistics) {
+    public static void readMyRunsData(CallBack_Runs callBack_runs) {
+        readRunsData(getUid(), callBack_runs);
+    }
+
+    public static void readRunsData(String uid, CallBack_Runs callBack_runs) {
+        ArrayList<Run> allRuns = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(Constants.STATISTICS_DB);
-        String uid = getUid();
+        DatabaseReference myRef = database.getReference(Constants.RUNS_DB);
 
         if (uid.isEmpty()) {
-            callBack_statistics.onStatisticsFailure("User not exist");
+            callBack_runs.onRunsFailure("User not exist");
             return;
         }
 
         myRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Statistics statistics = dataSnapshot.getValue(Statistics.class);
-                callBack_statistics.onStatisticsReady(statistics);
+                allRuns.clear();
+                for (DataSnapshot runSnapshot : dataSnapshot.getChildren()) {
+                    Run run = runSnapshot.getValue(Run.class);
+                    allRuns.add(run);
+                }
+
+                callBack_runs.onRunsReady(allRuns);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                callBack_statistics.onStatisticsFailure("Fail to load your statistics");
+                callBack_runs.onRunsFailure("Fail to load runs");
             }
         });
     }
 
+    public static void readMySettings(CallBack_Settings callBack_settings) {
+        readSettings(getUid(), callBack_settings);
+    }
+
+    public static void readSettings(String uid, CallBack_Settings callBack_settings) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(Constants.SETTINGS_DB);
+
+        if (uid.isEmpty()) {
+            callBack_settings.onSettingsFailure("User not exist");
+            return;
+        }
+
+        myRef.child(uid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Settings settings = dataSnapshot.getValue(Settings.class);
+                callBack_settings.onSettingsReady(settings);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                callBack_settings.onSettingsFailure("Fail to load settings");
+            }
+        });
+    }
+
+    public static void updateUser(User user) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(Constants.USERS_DB);
+        myRef.child(user.getUid()).setValue(user);
+    }
+
+    public static void updateSettings(Settings settings) {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(Constants.SETTINGS_DB);
+
+        myRef.child(getUid()).setValue(settings);
+    }
 }

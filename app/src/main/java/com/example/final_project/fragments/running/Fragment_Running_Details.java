@@ -19,24 +19,23 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.final_project.R;
+import com.example.final_project.activities.Activity_Run_Details;
 import com.example.final_project.callbacks.CallBack_Map;
 import com.example.final_project.objects.Run;
-import com.example.final_project.objects.Statistics;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.LocationService;
-import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
+import com.example.final_project.utils.MyStrings;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-
-import java.text.DecimalFormat;
 
 public class Fragment_Running_Details extends Fragment {
 
@@ -55,12 +54,13 @@ public class Fragment_Running_Details extends Fragment {
     private TextView running_LBL_distance;
     private TextView running_LBL_speed;
     private TextView running_LBL_calories;
+    private LinearLayout running_LAY_loadingLocation;
 
     private CallBack_Map callBack_map;
 
     private RUNNING_STATE running_state;
 
-    private Handler customHandler = new Handler();
+    private Handler handler = new Handler();
     private long startTime = 0L;
     private long duration = 0L;
     private long timeInMilliseconds = 0L;
@@ -110,6 +110,7 @@ public class Fragment_Running_Details extends Fragment {
         running_LBL_distance = view.findViewById(R.id.running_LBL_distance);
         running_LBL_speed = view.findViewById(R.id.running_LBL_speed);
         running_LBL_calories = view.findViewById(R.id.running_LBL_calories);
+        running_LAY_loadingLocation = view.findViewById(R.id.running_LAY_loadingLocation);
     }
 
     private void initViews() {
@@ -152,6 +153,9 @@ public class Fragment_Running_Details extends Fragment {
             return;
         }
 
+        running_BTN_start.setVisibility(View.GONE);
+        running_LAY_loadingLocation.setVisibility(View.VISIBLE);
+
         LocationBroadcastReceiver receiver = new LocationBroadcastReceiver();
         IntentFilter filter = new IntentFilter(Constants.ACT_LOC);
         getContext().registerReceiver(receiver, filter);
@@ -172,7 +176,7 @@ public class Fragment_Running_Details extends Fragment {
 
     private void startTimer() {
         startTime = System.currentTimeMillis();
-        customHandler.postDelayed(updateTimerThread, 0);
+        start();
 
         running_state = RUNNING_STATE.START;
         updateView();
@@ -192,14 +196,15 @@ public class Fragment_Running_Details extends Fragment {
 
     private void pauseRunning() {
         timeSwapBuff += timeInMilliseconds;
-        customHandler.removeCallbacks(updateTimerThread);
+        stop();
 
         running_state = RUNNING_STATE.PAUSE;
         updateView();
     }
 
     private void continueRunning() {
-        customHandler.postDelayed(updateTimerThread, 0);
+        startTime = System.currentTimeMillis();
+        start();
 
         running_state = RUNNING_STATE.CONTINUE;
         updateView();
@@ -209,7 +214,7 @@ public class Fragment_Running_Details extends Fragment {
         running_state = RUNNING_STATE.STOP;
         updateView();
 
-        customHandler.removeCallbacksAndMessages(null);
+        stop();
         endRun();
 
         timeInMilliseconds = 0L;
@@ -219,7 +224,6 @@ public class Fragment_Running_Details extends Fragment {
     private void updateView() {
         switch (running_state) {
             case START:
-                running_BTN_start.setVisibility(View.GONE);
                 running_BTN_pause.setVisibility(View.VISIBLE);
                 running_BTN_stop.setVisibility(View.VISIBLE);
                 break;
@@ -241,30 +245,24 @@ public class Fragment_Running_Details extends Fragment {
     }
 
     private void endRun() {
+        MySignal.getInstance().playSound(R.raw.snd_end_running);
         Run run = getRunDetails();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.RUNS_DB);
-        myRef.child(user.getUid()).push().setValue(run);
+        myRef.child(user.getUid()).child("" + run.getStartTime()).setValue(run);
 
-        String statisticsString = MySP.getInstance().getString(MySP.KEYS.STATISTICS_DATA, "");
-        Statistics statistics;
+        openRunDetailsActivity(run);
+    }
 
-        if (!statisticsString.isEmpty()) {
-            statistics = new Gson().fromJson(statisticsString, Statistics.class);
-        } else {
-            statistics = new Statistics();
-        }
-        statistics.addRun(run);
-
-        statisticsString = new Gson().toJson(statistics);
-        MySP.getInstance().putString(MySP.KEYS.STATISTICS_DATA, statisticsString);
-
-        myRef = database.getReference(Constants.STATISTICS_DB);
-        myRef.child(user.getUid()).setValue(statistics);
+    private void openRunDetailsActivity(Run run) {
+        Intent myIntent = new Intent(getContext(), Activity_Run_Details.class);
+        myIntent.putExtra(Constants.EXTRA_RUN_DETAILS, new Gson().toJson(run));
+        startActivity(myIntent);
+        getActivity().finish();
     }
 
     private Run getRunDetails() {
-        double averageSpeed = (totalDistance * 1000 * 60) / duration;
+        double averageSpeed = totalDistance / (duration / (1000.0 * 60.0 * 60.0));
 
         Run run = new Run()
                 .setStartTime(startTime)
@@ -277,69 +275,45 @@ public class Fragment_Running_Details extends Fragment {
         return run;
     }
 
-    private Runnable updateTimerThread = new Runnable() {
+    private Runnable runnable = new Runnable() {
 
         public void run() {
-            timeInMilliseconds = System.currentTimeMillis() - startTime;
-            duration = timeSwapBuff + timeInMilliseconds;
-
-            int secs = (int) (duration / 1000);
-            int mins = secs / 60;
-            int hours = mins / 60;
-            secs %= 60;
-            mins %= 60;
-            hours %= 24;
-            running_LBL_duration.setText("" + String.format("%02d", hours) + ":"
-                    + String.format("%02d", mins) + ":"
-                    + String.format("%02d", secs));
-            customHandler.postDelayed(this, 0);
+            runTimer();
         }
     };
 
-    public class LocationBroadcastReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            onReceiveLocation(intent);
-        }
+    private void runTimer() {
+        timeInMilliseconds = System.currentTimeMillis() - startTime;
+        duration = timeSwapBuff + timeInMilliseconds;
+        running_LBL_duration.setText(MyStrings.makeDurationString(duration));
+        handler.postDelayed(runnable, 0);
     }
 
-    private void onReceiveLocation(Intent intent) {
-        if (running_state == RUNNING_STATE.PAUSE || running_state == RUNNING_STATE.STOP) {
-            return;
-        }
+    private void start() {
+        handler.postDelayed(runnable, 0);
+    }
 
-        if (intent.getAction().equals(Constants.ACT_LOC)) {
-            double latitude = intent.getDoubleExtra(Constants.LATITUDE, 0.0);
-            double longitude = intent.getDoubleExtra(Constants.LONGITUDE, 0.0);
-            long durationTime = intent.getLongExtra(Constants.DURATION, 0L);
-            float accuracy = intent.getFloatExtra(Constants.ACCURACY, 0f);
-
-            Location currentLocation = new Location("");
-            currentLocation.setLatitude(latitude);
-            currentLocation.setLongitude(longitude);
-            currentLocation.setTime(durationTime);
-            currentLocation.setAccuracy(accuracy);
-
-            updateRunDetails(currentLocation);
-        }
+    private void stop() {
+        handler.removeCallbacks(runnable);
     }
 
     private void updateRunDetails(Location currentLocation) {
         double distance;
 
         if (previousLocation == null) {
+            MySignal.getInstance().playSound(R.raw.snd_start_running);
+            running_LAY_loadingLocation.setVisibility(View.GONE);
             startTimer();
             previousLocation = new Location("");
         } else {
             distance = getDistance(currentLocation);
             totalDistance += distance;
-            speed = getSpeed(distance, currentLocation.getTime());
+            speed = currentLocation.getSpeed() * 3.6;
             calories = getCalories();
-        }
 
-        if (speed > maxSpeed)
-            maxSpeed = speed;
+            if (speed > maxSpeed)
+                maxSpeed = speed;
+        }
 
         updateMap(currentLocation);
         updateViewDetails();
@@ -360,26 +334,48 @@ public class Fragment_Running_Details extends Fragment {
     }
 
     private void updateViewDetails() {
-        running_LBL_speed.setText(new DecimalFormat("##.##").format(speed));
-        running_LBL_distance.setText(new DecimalFormat("##.##").format(totalDistance));
+        running_LBL_speed.setText(MyStrings.twoDigitsAfterPoint(speed));
+        running_LBL_distance.setText(MyStrings.twoDigitsAfterPoint(totalDistance));
         running_LBL_calories.setText("" + calories);
     }
 
     private double getDistance(Location currentLocation) {
-        return previousLocation.distanceTo(currentLocation) / 1000.0;
-    }
-
-    private double getSpeed(double distance, long currentTime) {
-        double timeDiffInSeconds = (currentTime - previousLocation.getTime()) / 1000.0;
-        double distanceInMeters = distance * 1000.0;
-
-        return (distanceInMeters / timeDiffInSeconds) * 3.6;
+        return currentLocation.distanceTo(previousLocation) / 1000.0;
     }
 
     private int getCalories() {
         final double COEFFICIENT = 0.5474896193;
 
         return (int) Math.floor(COEFFICIENT * user.getWeight() * totalDistance);
+    }
+
+    public class LocationBroadcastReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            onReceiveLocation(intent);
+        }
+
+        private void onReceiveLocation(Intent intent) {
+            if (running_state == RUNNING_STATE.PAUSE || running_state == RUNNING_STATE.STOP) {
+                return;
+            }
+
+            if (intent.getAction().equals(Constants.ACT_LOC)) {
+                double latitude = intent.getDoubleExtra(Constants.LATITUDE, 0.0);
+                double longitude = intent.getDoubleExtra(Constants.LONGITUDE, 0.0);
+                long durationTime = intent.getLongExtra(Constants.DURATION, 0L);
+                float speed = intent.getFloatExtra(Constants.SPEED, 0f);
+
+                Location currentLocation = new Location("");
+                currentLocation.setLatitude(latitude);
+                currentLocation.setLongitude(longitude);
+                currentLocation.setTime(durationTime);
+                currentLocation.setSpeed(speed);
+
+                updateRunDetails(currentLocation);
+            }
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-package com.example.final_project.fragments.achievements;
+package com.example.final_project.fragments.user;
 
 import android.os.Bundle;
 
@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import com.example.final_project.R;
 import com.example.final_project.adapters.Adapter_ViewPager;
-import com.example.final_project.objects.Statistics;
+import com.example.final_project.fragments.running.Fragment_Runs_History;
 import com.google.android.material.tabs.TabLayout;
 
 public class Fragment_Achievements extends Fragment {

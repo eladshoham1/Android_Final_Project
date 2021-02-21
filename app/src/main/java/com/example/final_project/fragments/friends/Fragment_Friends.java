@@ -11,8 +11,21 @@ import android.view.ViewGroup;
 
 import com.example.final_project.R;
 import com.example.final_project.adapters.Adapter_ViewPager;
+import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySP;
+import com.example.final_project.utils.MySignal;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Fragment_Friends extends Fragment {
     private TabLayout friends_LAY_tabLayout;
@@ -20,13 +33,16 @@ public class Fragment_Friends extends Fragment {
 
     private Fragment_My_Friends fragment_my_friends;
     private Fragment_Friends_Request fragment_friends_request;
-    private Fragment_Search_Friends fragment_search_friends;
+    private Fragment_All_Users fragment_search_friends;
+
+    private HashMap<String, String> friendsStatus;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         findViews(view);
         initViews();
+        readFriendsStatus();
 
         return view;
     }
@@ -39,7 +55,7 @@ public class Fragment_Friends extends Fragment {
     private void initViews() {
         fragment_my_friends = new Fragment_My_Friends();
         fragment_friends_request = new Fragment_Friends_Request();
-        fragment_search_friends = new Fragment_Search_Friends();
+        fragment_search_friends = new Fragment_All_Users();
         friends_LAY_tabLayout.setupWithViewPager(friends_VPA_selectedPage);
 
         Adapter_ViewPager viewPagerAdapter = new Adapter_ViewPager(getChildFragmentManager(), 0);
@@ -48,9 +64,51 @@ public class Fragment_Friends extends Fragment {
         viewPagerAdapter.addFragment(fragment_search_friends, getResources().getString(R.string.search_friends));
 
         friends_VPA_selectedPage.setAdapter(viewPagerAdapter);
-
-        BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(0).getOrCreateBadge(); //TODO for requests
-        badgeDrawable.setVisible(true);
-        badgeDrawable.setNumber(2);
     }
+
+    private void readFriendsStatus() {
+        friendsStatus = new HashMap<>();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
+
+        myRef.child(MyDB.getUid()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot statusSnapshot : dataSnapshot.getChildren()) {
+                    friendsStatus.put(statusSnapshot.getKey(), (String) statusSnapshot.getValue());
+                }
+
+                MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
+                updateView();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                MySignal.getInstance().toast("Failed to read the friends request data");
+            }
+        });
+    }
+
+    private void updateView() {
+        int numberOfFriendsRequests = getNumberOfFriendsRequests();
+
+        if (numberOfFriendsRequests > 0) {
+            BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(1).getOrCreateBadge();
+            badgeDrawable.setVisible(true);
+            badgeDrawable.setNumber(numberOfFriendsRequests);
+        }
+    }
+
+    private int getNumberOfFriendsRequests() {
+        int countFriendsRequest = 0;
+
+        for (Map.Entry status : friendsStatus.entrySet()) {
+            if (status.getValue().equals(Constants.RECEIVED_REQUEST_DB)) {
+                countFriendsRequest++;
+            }
+        }
+
+        return countFriendsRequest;
+    }
+
 }

@@ -9,7 +9,6 @@
     <string name="continue_">Continue</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
-    <string name="cancel">Cancel</string>
 
     <string name="delete">Delete</string>
 
@@ -27,24 +26,31 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="general_settings">General Settings</string>
+    <string name="profile_settings">Profile Settings</string>
+    <string name="sound">Sound</string>
+    <string name="picture">Picture</string>
+
     <string name="first_name">FIRST NAME</string>
     <string name="last_name">LAST NAME</string>
     <string name="age">AGE</string>
     <string name="bmi" translatable="false">BMI</string>
     <string name="birth_date">BIRTH DATE</string>
-    <string name="height">HEIGHT (cm)</string>
-    <string name="weight">WEIGHT (kg)</string>
+    <string name="height">HEIGHT (CM)</string>
+    <string name="weight">WEIGHT (KG)</string>
+
     <string name="duration">DURATION</string>
+    <string name="number_of_runs">Number of runs</string>
     <string name="average_time">AVERAGE TIME</string>
     <string name="max_time">MAX TIME</string>
-    <string name="average_speed">AVERAGE SPEED</string>
-    <string name="max_speed">MAX SPEED</string>
-    <string name="average_distance">AVERAGE DISTANCE</string>
-    <string name="max_distance">MAX DISTANCE</string>
+    <string name="average_speed">AVERAGE SPEED (KPH)</string>
+    <string name="max_speed">MAX SPEED (KPH)</string>
+    <string name="average_distance">AVERAGE DISTANCE (KM)</string>
+    <string name="max_distance">MAX DISTANCE (KM)</string>
     <string name="average_calories">AVERAGE CALORIES</string>
     <string name="max_calories">MAX CALORIES</string>
     <string name="total_time">TOTAL TIME</string>
-    <string name="total_distance">TOTAL DISTANCE</string>
+    <string name="total_distance">TOTAL DISTANCE (KM)</string>
     <string name="total_calories">TOTAL CALORIES</string>
     <string name="save_changes">SAVE CHANGES</string>
 
@@ -53,10 +59,13 @@
 
     <string name="friends_request">Requests</string>
     <string name="search_friends">Search</string>
+    <string name="remove_friend">Remove</string>
+    <string name="cancel_request">Cancel Request</string>
 
     <string name="history">HISTORY</string>
     <string name="statistics">STATISTICS</string>
 
+    <string name="compete_friend">Competition</string>
     <string name="compete">Compete</string>
     <string name="accept">Accept</string>
     <string name="reject">Reject</string>
@@ -69,6 +78,7 @@
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>
+    <string name="loading_location">Loading your location</string>
 
     <string name="kilometer">km</string>
 

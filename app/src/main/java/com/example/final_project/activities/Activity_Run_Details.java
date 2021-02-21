@@ -4,28 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
 import com.example.final_project.R;
 import com.example.final_project.objects.Run;
-import com.example.final_project.objects.Statistics;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
-import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MyStrings;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
-
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Activity_Run_Details extends AppCompatActivity {
     private Toolbar run_details_TLB_toolbar;
@@ -37,6 +31,7 @@ public class Activity_Run_Details extends AppCompatActivity {
     private TextView run_details_LBL_maxSpeed;
     private TextView run_details_LBL_calories;
     private MaterialButton run_details_BTN_delete;
+    private MaterialButton run_details_BTN_continue;
 
     private User user;
     private Run run;
@@ -53,9 +48,14 @@ public class Activity_Run_Details extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
-
+        checkFinishedActivity();
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openMenuActivity() {
+        Intent myIntent = new Intent(this, Activity_Menu.class);
+        startActivity(myIntent);
+        finish();
     }
 
     private void findViews() {
@@ -68,6 +68,7 @@ public class Activity_Run_Details extends AppCompatActivity {
         run_details_LBL_maxSpeed = findViewById(R.id.run_details_LBL_maxSpeed);
         run_details_LBL_calories = findViewById(R.id.run_details_LBL_calories);
         run_details_BTN_delete = findViewById(R.id.run_details_BTN_delete);
+        run_details_BTN_continue = findViewById(R.id.run_details_BTN_continue);
     }
 
     private void initViews() {
@@ -78,19 +79,26 @@ public class Activity_Run_Details extends AppCompatActivity {
             }
         });
 
+        run_details_BTN_continue.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                checkFinishedActivity();
+            }
+        });
+
         String runString = getIntent().getStringExtra(Constants.EXTRA_RUN_DETAILS);
         run = new Gson().fromJson(runString, Run.class);
 
         setSupportActionBar(run_details_TLB_toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(new SimpleDateFormat("dd/MM/yyyy").format(new Date(run.getStartTime())));
+        getSupportActionBar().setTitle(MyStrings.makeDateString(run.getStartTime()));
 
-        run_details_LBL_startTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(run.getStartTime())));
-        run_details_LBL_endTime.setText(new SimpleDateFormat("HH:mm:ss").format(new Date(run.getStartTime() + run.getDuration())));
-        run_details_LBL_distance.setText(new DecimalFormat("##.##").format(run.getDistance()));
-        run_details_LBL_duration.setText(MyStrings.makeDateString(run.getDuration()));
-        run_details_LBL_averageSpeed.setText(new DecimalFormat("##.##").format(run.getAverageSpeed()));
-        run_details_LBL_maxSpeed.setText(new DecimalFormat("##.##").format(run.getMaxSpeed()));
+        run_details_LBL_startTime.setText(MyStrings.makeTimeString(run.getStartTime()));
+        run_details_LBL_endTime.setText(MyStrings.makeTimeString(run.getStartTime() + run.getDuration()));
+        run_details_LBL_distance.setText(MyStrings.twoDigitsAfterPoint(run.getDistance()));
+        run_details_LBL_duration.setText(MyStrings.makeDurationString(run.getDuration()));
+        run_details_LBL_averageSpeed.setText(MyStrings.twoDigitsAfterPoint(run.getAverageSpeed()));
+        run_details_LBL_maxSpeed.setText(MyStrings.twoDigitsAfterPoint(run.getMaxSpeed()));
         run_details_LBL_calories.setText("" + run.getCalories());
     }
 
@@ -100,17 +108,19 @@ public class Activity_Run_Details extends AppCompatActivity {
     }
 
     private void deleteRun() {
-        String statisticsString = MySP.getInstance().getString(MySP.KEYS.STATISTICS_DATA, "");
-        Statistics statistics = new Gson().fromJson(statisticsString, Statistics.class);
-        statistics.deleteRun(run);
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.RUNS_DB);
-        myRef.child(user.getUid()).child(run.getRid()).removeValue();
+        myRef.child(user.getUid()).child("" + run.getStartTime()).removeValue();
 
-        myRef = database.getReference(Constants.STATISTICS_DB);
-        myRef.child(user.getUid()).setValue(statistics);
-
-        finish();
+        checkFinishedActivity();
     }
+
+    private void checkFinishedActivity() {
+        if (isTaskRoot()) {
+            openMenuActivity();
+        } else {
+            finish();
+        }
+    }
+
 }

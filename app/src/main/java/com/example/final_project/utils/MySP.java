@@ -12,7 +12,7 @@ public class MySP {
         public static final String MY_SP = "MY_SP";
         public static final String SOUND_ENABLE = "SOUND_ENABLE";
         public static final String USER_DATA = "USER_DATA";
-        public static final String STATISTICS_DATA = "STATISTICS_DATA";
+        public static final String FRIENDS_DATA = "FRIENDS_DATA";
     }
 
     private static MySP instance;

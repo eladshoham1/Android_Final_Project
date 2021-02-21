@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.final_project.R;
 
 public class MySignal {
     private static MySignal instance;
@@ -31,12 +32,15 @@ public class MySignal {
     public void loadPicture(String url, ImageView imageView) {
         Glide.with(appContext)
                 .load(url)
+                .placeholder(R.drawable.ic_profile)
+                .error(R.drawable.ic_profile)
                 .centerCrop()
                 .into(imageView);
     }
 
     public void playSound(int rawSound) {
-        if (!MySP.getInstance().getBoolean(MySP.KEYS.SOUND_ENABLE, true)) {
+        boolean soundEnabled = MySP.getInstance().getBoolean(MySP.KEYS.SOUND_ENABLE, true);
+        if (!soundEnabled) {
             return;
         }
 

@@ -6,9 +6,9 @@
     tools:context=".fragments.friends.Fragment_Friends_Request">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/friends_LST_friendsRequest"
+        android:id="@+id/friends_request_LST_friendsRequest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_friends"/>
+        tools:listitem="@layout/list_friends_requests" />
 
 </FrameLayout>

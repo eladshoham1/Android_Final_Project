@@ -16,7 +16,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_Project">
-        <activity android:name=".activities.Activity_Verify_Phone"></activity>
+        <activity android:name=".activities.Activity_Compete_Friend"></activity>
+        <activity android:name=".activities.Activity_Friend_Profile" />
+        <activity android:name=".activities.Activity_Settings" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -47,7 +49,7 @@
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
         <activity
-            android:name=".activities.Activity_Create_User"
+            android:name=".activities.Activity_Edit_Profile"
             android:launchMode="singleTask"
             android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />

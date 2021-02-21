@@ -1,51 +1,34 @@
 package com.example.final_project.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.final_project.R;
+import com.example.final_project.callbacks.CallBack_UserPicture;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.Constants;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySignal;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHolder> {
 
-    public enum FRIENDS_STATE {
-        MY_FRIENDS,
-        MY_FRIENDS_REQUEST,
-        FRIENDS_REQUEST,
-        SEARCH_FRIENDS
-    }
-
     private ArrayList<User> friends;
-    private Context context;
     private LayoutInflater mInflater;
-    private FRIENDS_STATE state;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public Adapter_Friend(Context context, ArrayList<User> friends, FRIENDS_STATE state) {
+    public Adapter_Friend(Context context, ArrayList<User> friends) {
         if (context != null) {
-            this.context = context;
-            this.mInflater = LayoutInflater.from(this.context);
+            this.mInflater = LayoutInflater.from(context);
             this.friends = friends;
-            this.state = state;
         }
     }
 
@@ -63,49 +46,15 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
 
         updateFriendPicture(friend, holder);
         holder.friends_LBL_userName.setText(friend.getFirstName() + " " + friend.getLastName());
-        holder.friends_LBL_date.setText("" + friend.getAge());
-
-        switch (state) {
-            case MY_FRIENDS:
-                holder.friends_BTN_compete.setVisibility(View.VISIBLE);
-                break;
-            case MY_FRIENDS_REQUEST:
-                holder.friends_BTN_cancelRequest.setVisibility(View.VISIBLE);
-                break;
-            case FRIENDS_REQUEST:
-                holder.friends_BTN_acceptRequest.setVisibility(View.VISIBLE);
-                holder.friends_BTN_rejectRequest.setVisibility(View.VISIBLE);
-                break;
-            case SEARCH_FRIENDS:
-                holder.friends_BTN_sendRequest.setVisibility(View.VISIBLE);
-                break;
-        }
     }
 
     public void updateFriendPicture(User friend, MyViewHolder holder) {
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageReference = storage.getReference();
-        storageReference.child(Constants.IMAGES_DB + friend.getUid()).getDownloadUrl()
-                .addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        updateImage(uri.toString(), holder);
-                    }
-                });
-    }
-
-    private void updateImage(String url, MyViewHolder holder) {
-        Glide.with(context)
-                .load(url)
-                .centerCrop()
-                .placeholder(R.drawable.ic_profile)
-                .error(R.drawable.ic_profile)
-                .into(holder.friends_IMG_picture);
-    }
-
-    public void filterList(ArrayList<User> filteredList) {
-        friends = filteredList;
-        notifyDataSetChanged();
+        MyDB.readUserPicture(friend.getUid(), new CallBack_UserPicture() {
+            @Override
+            public void onPictureReady(String urlString) {
+                MySignal.getInstance().loadPicture(urlString, holder.friends_IMG_picture);
+            }
+        });
     }
 
     // total number of rows
@@ -128,33 +77,22 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
     public interface ItemClickListener {
         void onItemClick(View view, int position);
         void onCompeteClick(int position);
-        void onCancelRequest(int position);
-        void onAcceptRequest(int position);
-        void onRejectRequest(int position);
-        void onSendRequest(int position);
+        void onRemoveClick(int position);
     }
 
     // stores and recycles views as they are scrolled off screen
     public class MyViewHolder extends RecyclerView.ViewHolder {
         ShapeableImageView friends_IMG_picture;
         TextView friends_LBL_userName;
-        TextView friends_LBL_date;
         MaterialButton friends_BTN_compete;
-        MaterialButton friends_BTN_cancelRequest;
-        MaterialButton friends_BTN_acceptRequest;
-        MaterialButton friends_BTN_rejectRequest;
-        MaterialButton friends_BTN_sendRequest;
+        MaterialButton friends_BTN_remove;
 
         MyViewHolder(View itemView) {
             super(itemView);
             friends_IMG_picture = itemView.findViewById(R.id.friends_IMG_picture);
             friends_LBL_userName = itemView.findViewById(R.id.friends_LBL_userName);
-            friends_LBL_date = itemView.findViewById(R.id.friends_LBL_date);
             friends_BTN_compete = itemView.findViewById(R.id.friends_BTN_compete);
-            friends_BTN_cancelRequest = itemView.findViewById(R.id.friends_BTN_cancelRequest);
-            friends_BTN_acceptRequest = itemView.findViewById(R.id.friends_BTN_acceptRequest);
-            friends_BTN_rejectRequest = itemView.findViewById(R.id.friends_BTN_rejectRequest);
-            friends_BTN_sendRequest = itemView.findViewById(R.id.friends_BTN_sendRequest);
+            friends_BTN_remove = itemView.findViewById(R.id.friends_BTN_remove);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -174,38 +112,11 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
                 }
             });
 
-            friends_BTN_cancelRequest.setOnClickListener(new View.OnClickListener() {
+            friends_BTN_remove.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mClickListener != null) {
-                        mClickListener.onCancelRequest(getAdapterPosition());
-                    }
-                }
-            });
-
-            friends_BTN_acceptRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onAcceptRequest(getAdapterPosition());
-                    }
-                }
-            });
-
-            friends_BTN_rejectRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onRejectRequest(getAdapterPosition());
-                    }
-                }
-            });
-
-            friends_BTN_sendRequest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mClickListener != null) {
-                        mClickListener.onSendRequest(getAdapterPosition());
+                        mClickListener.onRemoveClick(getAdapterPosition());
                     }
                 }
             });

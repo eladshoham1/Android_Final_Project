@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.Activity_Compete_Friend">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/compete_friend_TLB_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="@string/compete_friend"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_numberOfRuns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/number_of_runs"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_numberOfRuns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_numberOfRuns"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myNumberOfRuns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_numberOfRuns"
+                android:layout_alignStart="@+id/compete_friend_PRG_numberOfRuns"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendNumberOfRuns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_numberOfRuns"
+                android:layout_alignEnd="@+id/compete_friend_PRG_numberOfRuns"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_averageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_averageTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_averageTime"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myAverageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageTime"
+                android:layout_alignStart="@+id/compete_friend_PRG_averageTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendAverageTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageTime"
+                android:layout_alignEnd="@+id/compete_friend_PRG_averageTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_maxTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_maxTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_maxTime"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myMaxTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxTime"
+                android:layout_alignStart="@+id/compete_friend_PRG_maxTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendMaxTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxTime"
+                android:layout_alignEnd="@+id/compete_friend_PRG_maxTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_totalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_time"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_totalTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_totalTime"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myTotalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalTime"
+                android:layout_alignStart="@+id/compete_friend_PRG_totalTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendTotalTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalTime"
+                android:layout_alignEnd="@+id/compete_friend_PRG_totalTime"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_averageSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_speed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_averageSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_averageSpeed"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myAverageSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageSpeed"
+                android:layout_alignStart="@+id/compete_friend_PRG_averageSpeed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendAverageSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageSpeed"
+                android:layout_alignEnd="@+id/compete_friend_PRG_averageSpeed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_maxSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_speed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_maxSpeed"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_maxSpeed"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myMaxSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxSpeed"
+                android:layout_alignStart="@+id/compete_friend_PRG_maxSpeed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendMaxSpeed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxSpeed"
+                android:layout_alignEnd="@+id/compete_friend_PRG_maxSpeed"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_averageDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_averageDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_averageDistance"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myAverageDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageDistance"
+                android:layout_alignStart="@+id/compete_friend_PRG_averageDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendAverageDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageDistance"
+                android:layout_alignEnd="@+id/compete_friend_PRG_averageDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_maxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_maxDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_maxDistance"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myMaxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxDistance"
+                android:layout_alignStart="@+id/compete_friend_PRG_maxDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendMaxDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxDistance"
+                android:layout_alignEnd="@+id/compete_friend_PRG_maxDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_totalDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_distance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_totalDistance"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_totalDistance"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myTotalDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalDistance"
+                android:layout_alignStart="@+id/compete_friend_PRG_totalDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendTotalDistance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalDistance"
+                android:layout_alignEnd="@+id/compete_friend_PRG_totalDistance"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_averageCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/average_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_averageCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_averageCalories"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myAverageCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageCalories"
+                android:layout_alignStart="@+id/compete_friend_PRG_averageCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendAverageCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_averageCalories"
+                android:layout_alignEnd="@+id/compete_friend_PRG_averageCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_maxCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/max_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_maxCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_maxCalories"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myMaxCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxCalories"
+                android:layout_alignStart="@+id/compete_friend_PRG_maxCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendMaxCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_maxCalories"
+                android:layout_alignEnd="@+id/compete_friend_PRG_maxCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:layout_marginBottom="14dp">
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_totalCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:layout_marginStart="16dp"
+                android:text="@string/total_calories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/compete_friend_PRG_totalCalories"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_LBL_totalCalories"
+                android:layout_margin="12dp"
+                style="@android:style/Widget.ProgressBar.Horizontal"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_myTotalCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalCalories"
+                android:layout_alignStart="@+id/compete_friend_PRG_totalCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/compete_friend_LBL_friendTotalCalories"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/compete_friend_PRG_totalCalories"
+                android:layout_alignEnd="@+id/compete_friend_PRG_totalCalories"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</ScrollView>

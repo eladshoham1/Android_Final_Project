@@ -13,15 +13,13 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.final_project.R;
-import com.example.final_project.fragments.achievements.Fragment_Achievements;
+import com.example.final_project.fragments.user.Fragment_Achievements;
 import com.example.final_project.fragments.friends.Fragment_Friends;
-import com.example.final_project.fragments.user.Fragment_Edit_Profile;
 import com.example.final_project.fragments.user.Fragment_Profile;
 import com.example.final_project.fragments.running.Fragment_Running;
-import com.example.final_project.fragments.settings.Fragment_Settings;
 import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MySP;
-import com.example.final_project.utils.MySignal;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -56,13 +54,6 @@ public class Activity_Menu extends AppCompatActivity {
         }
     }
 
-    private void findViews() {
-        menu_LAY_drawerLayout = findViewById(R.id.menu_LAY_drawerLayout);
-        menu_NAV_navigationDrawer = findViewById(R.id.menu_NAV_navigationDrawer);
-        main_TLB_toolbar = findViewById(R.id.main_TLB_toolbar);
-        main_NVG_bottomNavigation = findViewById(R.id.main_NVG_bottomNavigation);
-    }
-
     private void initUser() {
         String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
 
@@ -73,8 +64,29 @@ public class Activity_Menu extends AppCompatActivity {
         }
     }
 
+    private void findViews() {
+        menu_LAY_drawerLayout = findViewById(R.id.menu_LAY_drawerLayout);
+        menu_NAV_navigationDrawer = findViewById(R.id.menu_NAV_navigationDrawer);
+        main_TLB_toolbar = findViewById(R.id.main_TLB_toolbar);
+        main_NVG_bottomNavigation = findViewById(R.id.main_NVG_bottomNavigation);
+    }
+
+    private void initViews() {
+        setSupportActionBar(main_TLB_toolbar);
+        updateTile(R.id.menu_LBL_profile);
+        initFragments(new Fragment_Profile());
+
+        main_NVG_bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                replaceFragment(item.getItemId());
+                return true;
+            }
+        });
+    }
+
     private void completeUserData() {
-        Intent myIntent = new Intent(this, Activity_Create_User.class);
+        Intent myIntent = new Intent(this, Activity_Edit_Profile.class);
         startActivity(myIntent);
         finish();
     }
@@ -94,24 +106,43 @@ public class Activity_Menu extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 menu_LAY_drawerLayout.closeDrawer(menu_NAV_navigationDrawer);
-                replaceFragment(item.getItemId());
+                switch (item.getItemId()) {
+                    case R.id.navigation_editProfile:
+                        openEditProfile();
+                        break;
+                    case R.id.navigation_settings:
+                        openSettings();
+                        break;
+                    case R.id.navigation_logout:
+                        logOut();
+                        break;
+                }
+
                 return true;
             }
         });
     }
 
-    private void initViews() {
-        setSupportActionBar(main_TLB_toolbar);
-        updateTile(R.id.menu_LBL_profile);
-        initFragments(new Fragment_Profile());
+    private void openSettings() {
+        Intent myIntent = new Intent(this, Activity_Settings.class);
+        startActivity(myIntent);
+        finish();
+    }
 
-        main_NVG_bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                replaceFragment(item.getItemId());
-                return true;
-            }
-        });
+    private void openEditProfile() {
+        Intent myIntent = new Intent(this, Activity_Edit_Profile.class);
+        startActivity(myIntent);
+        finish();
+    }
+
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        MySP.getInstance().removeKey(MySP.KEYS.USER_DATA);
+        MySP.getInstance().removeKey(MySP.KEYS.FRIENDS_DATA);
+
+        Intent myIntent = new Intent(this, Activity_Login.class);
+        startActivity(myIntent);
+        finish();
     }
 
     private void replaceFragment(int id) {
@@ -134,31 +165,12 @@ public class Activity_Menu extends AppCompatActivity {
                 itemId = R.id.menu_LBL_achievements;
                 selectedFragment = new Fragment_Achievements();
                 break;
-            case R.id.navigation_editProfile:
-                itemId = R.id.navigation_editProfile;
-                selectedFragment = new Fragment_Edit_Profile();
-                break;
-            case R.id.navigation_settings:
-                itemId = R.id.navigation_settings;
-                selectedFragment = new Fragment_Settings();
-                break;
-            case R.id.navigation_logout:
-                logOut();
-                return;
         }
 
-        updateTile(itemId);
-        initFragments(selectedFragment);
-    }
-
-    private void logOut() {
-        FirebaseAuth.getInstance().signOut();
-        MySP.getInstance().removeKey(MySP.KEYS.USER_DATA);
-        MySP.getInstance().removeKey(MySP.KEYS.STATISTICS_DATA);
-
-        Intent myIntent = new Intent(this, Activity_Login.class);
-        startActivity(myIntent);
-        finish();
+        if (itemId != 0) {
+            updateTile(itemId);
+            initFragments(selectedFragment);
+        }
     }
 
     private void updateTile(int id) {
@@ -175,16 +187,14 @@ public class Activity_Menu extends AppCompatActivity {
             case R.id.menu_LBL_achievements:
                 getSupportActionBar().setTitle(R.string.achievements);
                 break;
-            case R.id.navigation_editProfile:
-                getSupportActionBar().setTitle(R.string.edit_profile);
-                break;
-            case R.id.navigation_settings:
-                getSupportActionBar().setTitle(R.string.settings);
-                break;
         }
     }
 
     private void initFragments(Fragment selectedFragment) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
+        selectedFragment.setArguments(bundle);
+
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.main_FRG_selectedFragment, selectedFragment)

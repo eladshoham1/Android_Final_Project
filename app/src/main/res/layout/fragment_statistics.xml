@@ -18,6 +18,43 @@
             android:padding="12dp">
 
             <ImageView
+                android:id="@+id/statistics_IMG_numOfRuns"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_margin="6dp"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:src="@drawable/ic_running" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_numOfRunsText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/statistics_IMG_numOfRuns"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="16dp"
+                android:text="@string/number_of_runs"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/statistics_LBL_numOfRuns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="16dp"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp">
+
+            <ImageView
                 android:id="@+id/statistics_IMG_averageTime"
                 android:layout_width="35dp"
                 android:layout_height="35dp"

@@ -10,6 +10,6 @@
         android:id="@+id/runs_history_LST_allRuns"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_running"/>
+        tools:listitem="@layout/list_running" />
 
 </FrameLayout>

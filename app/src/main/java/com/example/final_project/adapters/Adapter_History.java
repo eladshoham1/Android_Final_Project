@@ -10,23 +10,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_project.R;
 import com.example.final_project.objects.Run;
+import com.example.final_project.utils.MyStrings;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyViewHolder> {
 
     private ArrayList<Run> allRuns;
-    private Context context;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
     public Adapter_History(Context context, ArrayList<Run> allRuns) {
         if (context != null) {
-            this.context = context;
             this.mInflater = LayoutInflater.from(context);
             this.allRuns = allRuns;
         }
@@ -43,34 +39,17 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Run run = allRuns.get(position);
+        String kmString = holder.context.getString(R.string.kilometer);
 
-        holder.history_LBL_date.setText(new SimpleDateFormat("dd/MM/yyyy").format(new Date(run.getStartTime())));
-        holder.history_LBL_duration.setText(getStringDuration(run.getDuration()));
-        holder.history_LBL_distance.setText(new DecimalFormat("##.##").format(run.getDistance()) + " " + context.getResources().getString(R.string.kilometer));
+        holder.history_LBL_date.setText(MyStrings.makeDateString(run.getStartTime()));
+        holder.history_LBL_duration.setText(MyStrings.makeDurationString(run.getDuration()));
+        holder.history_LBL_distance.setText(MyStrings.twoDigitsAfterPoint(run.getDistance()) + " " + kmString);
     }
 
     // total number of rows
     @Override
     public int getItemCount() {
         return allRuns.size();
-    }
-
-    public String getStringDuration(long duration) {
-        long second, minutes, hours;
-        StringBuilder strDuration = new StringBuilder();
-
-        second = duration / 1000;
-        minutes = second / 60;
-        hours = minutes / 60;
-        second %= 60;
-        minutes %= 60;
-        hours %= 24;
-
-        strDuration.append(hours < 10 ? "0" : "").append(hours).append(":");
-        strDuration.append(minutes < 10 ? "0" : "").append(minutes).append(":");
-        strDuration.append(second < 10 ? "0" : "").append(second);
-
-        return strDuration.toString();
     }
 
     // convenience method for getting data at click position
@@ -93,12 +72,14 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
         TextView history_LBL_date;
         TextView history_LBL_duration;
         TextView history_LBL_distance;
+        Context context;
 
         MyViewHolder(View itemView) {
             super(itemView);
             history_LBL_date = itemView.findViewById(R.id.history_LBL_date);
             history_LBL_duration = itemView.findViewById(R.id.history_LBL_duration);
             history_LBL_distance = itemView.findViewById(R.id.history_LBL_distance);
+            context = itemView.getContext();
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

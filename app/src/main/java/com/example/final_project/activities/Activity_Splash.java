@@ -1,7 +1,6 @@
 package com.example.final_project.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import android.animation.Animator;
@@ -12,19 +11,9 @@ import android.widget.ImageView;
 
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_User;
-import com.example.final_project.fragments.user.Fragment_Edit_Profile;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
-import com.example.final_project.utils.MySignal;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 public class Activity_Splash extends AppCompatActivity {
@@ -46,7 +35,7 @@ public class Activity_Splash extends AppCompatActivity {
     }
 
     private void readUserDate() {
-        MyDB.readUserData(new CallBack_User() {
+        MyDB.readMyUserData(new CallBack_User() {
             @Override
             public void onUserReady(User user) {
                 startApp(user);

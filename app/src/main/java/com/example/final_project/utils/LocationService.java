@@ -5,6 +5,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 
@@ -44,7 +45,7 @@ public class LocationService extends Service {
         intent.putExtra(Constants.LATITUDE, currentLocation.getLatitude());
         intent.putExtra(Constants.LONGITUDE, currentLocation.getLongitude());
         intent.putExtra(Constants.DURATION, currentLocation.getTime());
-        intent.putExtra(Constants.ACCURACY, currentLocation.getAccuracy());
+        intent.putExtra(Constants.SPEED, currentLocation.getSpeed());
 
         sendBroadcast(intent);
     }
@@ -56,14 +57,15 @@ public class LocationService extends Service {
     }
 
     private void requestLocation() {
-        LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(3000);
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
+        LocationRequest locationRequest = new LocationRequest();
+        locationRequest.setInterval(3000);
+        locationRequest.setFastestInterval(1000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }
 }

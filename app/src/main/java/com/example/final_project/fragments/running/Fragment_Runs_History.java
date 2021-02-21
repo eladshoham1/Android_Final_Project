@@ -1,4 +1,4 @@
-package com.example.final_project.fragments.achievements;
+package com.example.final_project.fragments.running;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,16 +14,13 @@ import android.view.ViewGroup;
 import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Run_Details;
 import com.example.final_project.adapters.Adapter_History;
+import com.example.final_project.callbacks.CallBack_Runs;
 import com.example.final_project.objects.Run;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
+import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -52,25 +49,15 @@ public class Fragment_Runs_History extends Fragment {
     }
 
     private void getAllRuns() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(Constants.RUNS_DB);
-
-        myRef.child(user.getUid()).addValueEventListener(new ValueEventListener() {
+        MyDB.readMyRunsData(new CallBack_Runs() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Run> allRuns = new ArrayList<Run>();
-                for (DataSnapshot runSnapshot: dataSnapshot.getChildren()) {
-                    Run run = runSnapshot.getValue(Run.class);
-                    run.setRid(runSnapshot.getKey());
-                    allRuns.add(run);
-                }
-
+            public void onRunsReady(ArrayList<Run> allRuns) {
                 showAllRuns(allRuns);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                MySignal.getInstance().toast("Failed to read the runs data");
+            public void onRunsFailure(String msg) {
+                MySignal.getInstance().toast(msg);
             }
         });
     }

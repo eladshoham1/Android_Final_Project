@@ -6,15 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    tools:context=".fragments.user.Fragment_Edit_Profile">
+    tools:context=".activities.Activity_Edit_Profile">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/edit_profile_TLB_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:title="@string/edit_profile"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/editProfile_IMG_picture"
+            android:id="@+id/edit_profile_IMG_picture"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_gravity="center_horizontal"
@@ -23,7 +31,7 @@
             android:src="@drawable/ic_profile" />
 
         <TextView
-            android:id="@+id/editProfile_LBL_firstName"
+            android:id="@+id/edit_profile_LBL_firstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -33,7 +41,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editProfile_EDT_firstName"
+            android:id="@+id/edit_profile_EDT_firstName"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -48,7 +56,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/editProfile_LBL_lastName"
+            android:id="@+id/edit_profile_LBL_lastName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -58,7 +66,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editProfile_EDT_lastName"
+            android:id="@+id/edit_profile_EDT_lastName"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -73,7 +81,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/editProfile_LBL_height"
+            android:id="@+id/edit_profile_LBL_height"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -83,7 +91,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editProfile_EDT_height"
+            android:id="@+id/edit_profile_EDT_height"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -98,7 +106,7 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
-            android:id="@+id/editProfile_LBL_weight"
+            android:id="@+id/edit_profile_LBL_weight"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -108,7 +116,7 @@
             android:textSize="16sp" />
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/editProfile_EDT_weight"
+            android:id="@+id/edit_profile_EDT_weight"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -124,7 +132,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/editProfile_BTN_birthDate"
+            android:id="@+id/edit_profile_BTN_birthDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -135,7 +143,7 @@
 
         <com.google.android.material.button.MaterialButton
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/editProfile_BTN_saveChanges"
+            android:id="@+id/edit_profile_BTN_saveChanges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
