@@ -7,7 +7,7 @@ Run Tracker is a running application for android devices developed by Elad Shoha
 
 ### Built With
 
-* [Android Studio](https://www.android.com/)
+* [Android Studio](https://developer.android.com/studio)
 * [Java8](https://www.java.com/en/)
 
 ### Images
