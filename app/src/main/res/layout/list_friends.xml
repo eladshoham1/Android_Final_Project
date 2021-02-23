@@ -21,36 +21,65 @@
             android:id="@+id/friends_LBL_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/friends_IMG_picture"
-            android:layout_marginStart="12dp"
             android:layout_toEndOf="@+id/friends_IMG_picture"
+            android:layout_marginStart="12dp"
             android:textColor="#000000"
             android:textSize="18sp"
             android:textStyle="bold" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/friends_BTN_compete"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/friends_LBL_userName"
-            android:layout_toEndOf="@+id/friends_IMG_picture"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="24dp"
-            android:text="@string/compete"
-            android:textSize="12sp" />
+            android:layout_toStartOf="@+id/friends_BTN_remove"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/purple_500"
+            android:textSize="12sp"
+            android:text="@string/compete" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/friends_BTN_remove"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/friends_LBL_userName"
+            android:visibility="gone"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/purple_500"
+            android:textSize="12sp"
+            android:text="@string/remove_friend" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_acceptRequest"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/friends_LBL_userName"
-            android:layout_toEndOf="@+id/friends_BTN_compete"
-            android:layout_marginTop="12dp"
-            android:layout_marginStart="24dp"
-            android:text="@string/remove_friend"
-            android:textSize="12sp" />
+            android:layout_toStartOf="@+id/friends_BTN_rejectRequest"
+            android:layout_marginEnd="10dp"
+            android:visibility="gone"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/purple_500"
+            android:textSize="12sp"
+            android:text="@string/accept" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/friends_BTN_rejectRequest"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/friends_LBL_userName"
+            android:visibility="gone"
+            app:cornerRadius="20dp"
+            app:strokeColor="@color/purple_500"
+            android:textSize="12sp"
+            android:text="@string/reject" />
 
     </RelativeLayout>
 

@@ -22,7 +22,6 @@
             android:id="@+id/users_LBL_userName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/users_IMG_picture"
             android:layout_marginStart="12dp"
             android:textColor="#000000"
@@ -31,25 +30,29 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/users_BTN_sendRequest"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/users_LBL_userName"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:visibility="gone"
-                android:text="@string/send_request"
-                android:textSize="12sp" />
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/purple_500"
+                android:textSize="12sp"
+                android:text="@string/send_request" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/users_BTN_cancelRequest"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/users_LBL_userName"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
                 android:visibility="gone"
-                android:text="@string/cancel_request"
-                android:textSize="12sp" />
+                app:cornerRadius="20dp"
+                app:strokeColor="@color/purple_500"
+                android:textSize="12sp"
+                android:text="@string/cancel_request" />
 
     </RelativeLayout>
 

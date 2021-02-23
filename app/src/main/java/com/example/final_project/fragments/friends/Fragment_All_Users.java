@@ -16,10 +16,10 @@ import android.view.ViewGroup;
 import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Friend_Profile;
 import com.example.final_project.adapters.Adapter_User;
+import com.example.final_project.callbacks.CallBack_Friends;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DataSnapshot;
@@ -37,10 +37,9 @@ public class Fragment_All_Users extends Fragment {
     private TextInputEditText all_users_EDT_searchFriends;
     private RecyclerView all_users_LST_searchFriends;
 
-    private HashMap<String, String> friendsStatus;
     private ArrayList<User> allUsers;
     private ArrayList<String> allFriendsKeys;
-    private ArrayList<String> myFriendsRequestsKeys;
+    private ArrayList<String> friendsRequestsKeys;
     private Adapter_User adapter_user;
 
     private String myID;
@@ -51,7 +50,7 @@ public class Fragment_All_Users extends Fragment {
         findViews(view);
         initViews();
         setUserID();
-        setAllFriends();
+        readAllFriendsStatus();
 
         return view;
     }
@@ -98,24 +97,29 @@ public class Fragment_All_Users extends Fragment {
         myID = MyDB.getUid();
     }
 
-    private void setAllFriends() {
-        String friendsStatusString = MySP.getInstance().getString(MySP.KEYS.FRIENDS_DATA, "");
+    private void readAllFriendsStatus() {
+        MyDB.readFriendsStatusData(new CallBack_Friends() {
+            @Override
+            public void onFriendsReady(HashMap<String, String> friendsStatus) {
+                readAllUsersData(friendsStatus);
+            }
 
-        if (!friendsStatusString.isEmpty()) {
-            friendsStatus = new Gson().fromJson(friendsStatusString, HashMap.class);
-            readAllUsersData();
-        }
+            @Override
+            public void onFriendsFailure(String msg) {
+                MySignal.getInstance().toast(msg);
+            }
+        });
     }
 
-    private void readAllUsersData() {
+    private void readAllUsersData(HashMap<String, String> friendsStatus) {
         allFriendsKeys = new ArrayList<>();
-        myFriendsRequestsKeys = new ArrayList<>();
+        friendsRequestsKeys = new ArrayList<>();
 
         for (Map.Entry status : friendsStatus.entrySet()) {
             if (status.getValue().equals(Constants.CURRENT_FRIEND_DB) || status.getValue().equals(Constants.RECEIVED_REQUEST_DB)) {
                 allFriendsKeys.add((String) status.getKey());
             } else if (status.getValue().equals(Constants.SENT_REQUEST_DB)) {
-                myFriendsRequestsKeys.add((String) status.getKey());
+                friendsRequestsKeys.add((String) status.getKey());
             }
         }
 
@@ -123,13 +127,13 @@ public class Fragment_All_Users extends Fragment {
     }
 
     private void readAllUsers() {
-        allUsers = new ArrayList<>();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.USERS_DB);
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                allUsers = new ArrayList<>();
                 for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
 
@@ -138,7 +142,7 @@ public class Fragment_All_Users extends Fragment {
                     }
                 }
 
-                updateUsersView();
+                showUsersView();
             }
 
             @Override
@@ -162,23 +166,23 @@ public class Fragment_All_Users extends Fragment {
         return false;
     }
 
-    private void updateUsersView() {
+    private void showUsersView() {
         all_users_LST_searchFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter_user = new Adapter_User(getContext(), allUsers, myFriendsRequestsKeys);
+        adapter_user = new Adapter_User(getContext(), allUsers, friendsRequestsKeys);
         adapter_user.setClickListener(new Adapter_User.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                openFriendFragment(allUsers.get(position));
+                openFriendFragment(adapter_user.getItem(position));
             }
 
             @Override
             public void onSendRequest(int position) {
-                sendFriendRequest(allUsers.get(position).getUid());
+                sendFriendRequest(adapter_user.getItem(position).getUid());
             }
 
             @Override
             public void onCancelRequest(int position) {
-                cancelFriendRequest(allUsers.get(position).getUid());
+                cancelFriendRequest(adapter_user.getItem(position).getUid());
             }
         });
         all_users_LST_searchFriends.setAdapter(adapter_user);
@@ -196,9 +200,8 @@ public class Fragment_All_Users extends Fragment {
 
         myRef.child(myID).child(userID).setValue(Constants.SENT_REQUEST_DB);
         myRef.child(userID).child(myID).setValue(Constants.RECEIVED_REQUEST_DB);
-
-        friendsStatus.put(userID, Constants.SENT_REQUEST_DB);
-        MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
+        friendsRequestsKeys.add(userID);
+        adapter_user.notifyDataSetChanged();
     }
 
     private void cancelFriendRequest(String userID) {
@@ -207,8 +210,7 @@ public class Fragment_All_Users extends Fragment {
 
         myRef.child(myID).child(userID).removeValue();
         myRef.child(userID).child(myID).removeValue();
-
-        friendsStatus.remove(userID);
-        MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
+        allFriendsKeys.remove(userID);
+        adapter_user.notifyDataSetChanged();
     }
 }

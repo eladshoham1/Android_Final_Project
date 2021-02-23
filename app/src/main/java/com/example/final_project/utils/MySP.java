@@ -3,16 +3,13 @@ package com.example.final_project.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.final_project.objects.User;
-import com.google.gson.Gson;
-
 public class MySP {
 
     public interface KEYS {
         public static final String MY_SP = "MY_SP";
         public static final String SOUND_ENABLE = "SOUND_ENABLE";
-        public static final String USER_DATA = "USER_DATA";
-        public static final String FRIENDS_DATA = "FRIENDS_DATA";
+        public static final String MY_WEIGHT = "MY_WEIGHT";
+        public static final String RUN_DETAILS = "RUN_DETAILS";
     }
 
     private static MySP instance;
@@ -40,6 +37,16 @@ public class MySP {
 
     public boolean getBoolean(String key, boolean def) {
         return prefs.getBoolean(key, def);
+    }
+
+    public void putFloat(String key, float value) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putFloat(key, value);
+        editor.apply();
+    }
+
+    public float getFloat(String key, float def) {
+        return prefs.getFloat(key, def);
     }
 
     public void putString(String key, String value) {

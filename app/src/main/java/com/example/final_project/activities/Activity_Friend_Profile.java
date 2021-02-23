@@ -41,7 +41,7 @@ public class Activity_Friend_Profile extends AppCompatActivity {
 
         String userString = getIntent().getStringExtra(Constants.EXTRA_USER_DETAILS);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.EXTRA_USER_DETAILS, userString);
+        bundle.putString(Constants.BUNDLE_USER_DETAILS, userString);
 
         fragment_profile = new Fragment_Profile();
         fragment_profile.setArguments(bundle);

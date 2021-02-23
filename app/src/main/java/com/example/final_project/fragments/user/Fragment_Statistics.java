@@ -13,12 +13,9 @@ import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_Runs;
 import com.example.final_project.objects.Run;
 import com.example.final_project.objects.Statistics;
-import com.example.final_project.objects.User;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.example.final_project.utils.MyStrings;
-import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
@@ -36,13 +33,10 @@ public class Fragment_Statistics extends Fragment {
     private TextView statistics_LBL_totalDistance;
     private TextView statistics_LBL_totalCalories;
 
-    private User user;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics, container, false);
         findViews(view);
-        initUser();
         readStatistics();
 
         return view;
@@ -61,11 +55,6 @@ public class Fragment_Statistics extends Fragment {
         statistics_LBL_totalTime = view.findViewById(R.id.statistics_LBL_totalTime);
         statistics_LBL_totalDistance = view.findViewById(R.id.statistics_LBL_totalDistance);
         statistics_LBL_totalCalories = view.findViewById(R.id.statistics_LBL_totalCalories);
-    }
-
-    private void initUser() {
-        String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
-        user = new Gson().fromJson(userString, User.class);
     }
 
     private void readStatistics() {

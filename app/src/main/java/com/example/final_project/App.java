@@ -2,7 +2,6 @@ package com.example.final_project;
 
 import android.app.Application;
 
-import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySignal;
 import com.example.final_project.utils.MySP;
 

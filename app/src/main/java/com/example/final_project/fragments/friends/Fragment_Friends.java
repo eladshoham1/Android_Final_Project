@@ -11,18 +11,11 @@ import android.view.ViewGroup;
 
 import com.example.final_project.R;
 import com.example.final_project.adapters.Adapter_ViewPager;
+import com.example.final_project.callbacks.CallBack_Friends;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
-import com.example.final_project.utils.MySignal;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.gson.Gson;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,14 +28,12 @@ public class Fragment_Friends extends Fragment {
     private Fragment_Friends_Request fragment_friends_request;
     private Fragment_All_Users fragment_search_friends;
 
-    private HashMap<String, String> friendsStatus;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friends, container, false);
         findViews(view);
         initViews();
-        readFriendsStatus();
+        readFriendsRequests();
 
         return view;
     }
@@ -66,49 +57,36 @@ public class Fragment_Friends extends Fragment {
         friends_VPA_selectedPage.setAdapter(viewPagerAdapter);
     }
 
-    private void readFriendsStatus() {
-        friendsStatus = new HashMap<>();
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
-
-        myRef.child(MyDB.getUid()).addValueEventListener(new ValueEventListener() {
+    private void readFriendsRequests() {
+        MyDB.readFriendsStatusData(new CallBack_Friends() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot statusSnapshot : dataSnapshot.getChildren()) {
-                    friendsStatus.put(statusSnapshot.getKey(), (String) statusSnapshot.getValue());
-                }
-
-                MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
-                updateView();
+            public void onFriendsReady(HashMap<String, String> friendsStatus) {
+                updateView(friendsStatus);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
-                MySignal.getInstance().toast("Failed to read the friends request data");
+            public void onFriendsFailure(String msg) {
+
             }
         });
     }
 
-    private void updateView() {
-        int numberOfFriendsRequests = getNumberOfFriendsRequests();
-
-        if (numberOfFriendsRequests > 0) {
-            BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(1).getOrCreateBadge();
-            badgeDrawable.setVisible(true);
-            badgeDrawable.setNumber(numberOfFriendsRequests);
-        }
-    }
-
-    private int getNumberOfFriendsRequests() {
-        int countFriendsRequest = 0;
-
+    private void updateView(HashMap<String, String> friendsStatus) {
+        BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(1).getOrCreateBadge();
+        int countFriendsRequests = 0;
+        
         for (Map.Entry status : friendsStatus.entrySet()) {
             if (status.getValue().equals(Constants.RECEIVED_REQUEST_DB)) {
-                countFriendsRequest++;
+                countFriendsRequests++;
             }
         }
 
-        return countFriendsRequest;
+        if (countFriendsRequests > 0) {
+            badgeDrawable.setVisible(true);
+            badgeDrawable.setNumber(countFriendsRequests);
+        } else {
+            badgeDrawable.setVisible(false);
+        }
     }
 
 }

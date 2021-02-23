@@ -15,11 +15,11 @@ import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Compete_Friend;
 import com.example.final_project.activities.Activity_Friend_Profile;
 import com.example.final_project.adapters.Adapter_Friend;
+import com.example.final_project.callbacks.CallBack_Friends;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -32,14 +32,13 @@ import java.util.Map;
 public class Fragment_My_Friends extends Fragment {
     private RecyclerView my_friends_LST_myFriends;
 
-    private HashMap<String, String> friendsStatus;
-    private ArrayList<User> allMyFriends;
     private Adapter_Friend adapter_friend;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_my_friends, container, false);
         findViews(view);
+        showAllFriends();
         setAllFriends();
 
         return view;
@@ -50,56 +49,74 @@ public class Fragment_My_Friends extends Fragment {
     }
 
     private void setAllFriends() {
-        String friendsStatusString = MySP.getInstance().getString(MySP.KEYS.FRIENDS_DATA, "");
-
-        if (!friendsStatusString.isEmpty()) {
-            friendsStatus = new Gson().fromJson(friendsStatusString, HashMap.class);
-            readAllMyFriendsData();
-        }
-    }
-
-    private void readAllMyFriendsData() {
-        allMyFriends = new ArrayList<>();
-
-        for (Map.Entry status : friendsStatus.entrySet()) {
-            if (status.getValue().equals(Constants.CURRENT_FRIEND_DB)) {
-                readFriendData((String) status.getKey());
-            }
-        }
-    }
-
-    private void readFriendData(String key) {
-        MyDB.readUserData(key, new CallBack_User() {
+        MyDB.readFriendsStatusData(new CallBack_Friends() {
             @Override
-            public void onUserReady(User user) {
-                allMyFriends.add(user);
-                showAllFriends();
+            public void onFriendsReady(HashMap<String, String> friendsStatus) {
+                setMyFriendsKeys(friendsStatus);
             }
 
             @Override
-            public void onUserFailure(String msg) {
+            public void onFriendsFailure(String msg) {
                 MySignal.getInstance().toast(msg);
             }
         });
     }
 
+    private void setMyFriendsKeys(HashMap<String, String> friendsStatus) {
+        ArrayList<String> friendsKeys = new ArrayList<>();
+
+        for (Map.Entry status : friendsStatus.entrySet()) {
+            if (status.getValue().equals(Constants.CURRENT_FRIEND_DB)) {
+                friendsKeys.add((String) status.getKey());
+            }
+        }
+
+        readFriendsData(friendsKeys);
+    }
+
+    private void readFriendsData(ArrayList<String> friendsStatus) {
+        for (String key : friendsStatus) {
+            MyDB.readUserData(key, new CallBack_User() {
+                @Override
+                public void onUserReady(User user) {
+                    adapter_friend.addItem(user);
+                }
+
+                @Override
+                public void onUserFailure(String msg) {
+                    MySignal.getInstance().toast(msg);
+                }
+            });
+        }
+    }
+
     private void showAllFriends() {
         my_friends_LST_myFriends.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter_friend = new Adapter_Friend(getContext(), allMyFriends);
+        adapter_friend = new Adapter_Friend(getContext(), Adapter_Friend.FRIENDS_STATUS.MY_FRIENDS);
         adapter_friend.setClickListener(new Adapter_Friend.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                openFriendFragment(allMyFriends.get(position));
+                openFriendFragment(adapter_friend.getItem(position));
             }
 
             @Override
             public void onCompeteClick(int position) {
-                friendsCompetition(allMyFriends.get(position).getUid());
+                friendsCompetition(adapter_friend.getItem(position).getUid());
             }
 
             @Override
             public void onRemoveClick(int position) {
-                removeFriend(allMyFriends.get(position).getUid());
+                removeFriend(adapter_friend.getItem(position));
+            }
+
+            @Override
+            public void onAcceptRequest(int position) {
+
+            }
+
+            @Override
+            public void onRejectRequest(int position) {
+
             }
         });
         my_friends_LST_myFriends.setAdapter(adapter_friend);
@@ -117,15 +134,14 @@ public class Fragment_My_Friends extends Fragment {
         startActivity(myIntent);
     }
 
-    private void removeFriend(String userID) {
+    private void removeFriend(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
 
-        myRef.child(MyDB.getUid()).child(userID).removeValue();
-        myRef.child(userID).child(MyDB.getUid()).removeValue();
+        myRef.child(MyDB.getUid()).child(user.getUid()).removeValue();
+        myRef.child(user.getUid()).child(MyDB.getUid()).removeValue();
 
-        friendsStatus.remove(userID);
-        MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
+        adapter_friend.removeItem(user);
     }
 
 }

@@ -4,6 +4,7 @@ import java.util.Calendar;
 
 public class User {
     private String uid = "";
+    private String pictureUrl = "";
     private String firstName = "";
     private String lastName = "";
     private String phone = "";
@@ -12,11 +13,13 @@ public class User {
     private int birthYear = 0;
     private int birthMonth = 0;
     private int birthDay = 0;
+    private Settings settings;
 
     public User() { }
 
-    public User(String uid, String firstName, String lastName, String phone, double height, double weight, int birthYear, int birthMonth, int birthDay) {
+    public User(String uid, String pictureUrl, String firstName, String lastName, String phone, double height, double weight, int birthYear, int birthMonth, int birthDay, Settings settings) {
         this.uid = uid;
+        this.pictureUrl = pictureUrl;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -25,6 +28,7 @@ public class User {
         this.birthYear = birthYear;
         this.birthMonth = birthMonth;
         this.birthDay = birthDay;
+        this.settings = settings;
     }
 
     public String getUid() {
@@ -33,6 +37,15 @@ public class User {
 
     public User setUid(String uid) {
         this.uid = uid;
+        return this;
+    }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
+    public User setPictureUrl(String pictureUrl) {
+        this.pictureUrl = pictureUrl;
         return this;
     }
 
@@ -117,10 +130,19 @@ public class User {
         return this;
     }
 
+    public Settings getSettings() {
+        return settings;
+    }
+
+    public User setSettings(Settings settings) {
+        this.settings = settings;
+        return this;
+    }
+
     public int getAge() {
         Calendar calenderToday = Calendar.getInstance();
         int currentYear = calenderToday.get(Calendar.YEAR);
-        int currentMonth = 1 + calenderToday.get(Calendar.MONTH);
+        int currentMonth = calenderToday.get(Calendar.MONTH) + 1;
         int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
         int age = currentYear - birthYear;
 

@@ -17,66 +17,55 @@ import com.example.final_project.fragments.user.Fragment_Achievements;
 import com.example.final_project.fragments.friends.Fragment_Friends;
 import com.example.final_project.fragments.user.Fragment_Profile;
 import com.example.final_project.fragments.running.Fragment_Running;
-import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MySP;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.gson.Gson;
 
 public class Activity_Menu extends AppCompatActivity {
     private DrawerLayout menu_LAY_drawerLayout;
     private NavigationView menu_NAV_navigationDrawer;
-    private BottomNavigationView main_NVG_bottomNavigation;
+    private BottomNavigationView menu_NVG_bottomNavigation;
     private Fragment selectedFragment = null;
-    private Toolbar main_TLB_toolbar;
-
-    private User user;
+    private Toolbar menu_TLB_toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
 
-        initUser();
         findViews();
         initViews();
         navigationDrawer();
     }
 
     @Override
-    public void onBackPressed() {
+    protected void onStop() {
         if (menu_LAY_drawerLayout.isDrawerOpen(GravityCompat.START)) {
             menu_LAY_drawerLayout.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
         }
-    }
 
-    private void initUser() {
-        String userString = MySP.getInstance().getString(MySP.KEYS.USER_DATA, "");
-
-        if (!userString.isEmpty()) {
-            user = new Gson().fromJson(userString, User.class);
-        } else {
-            completeUserData();
-        }
+        super.onStop();
     }
 
     private void findViews() {
         menu_LAY_drawerLayout = findViewById(R.id.menu_LAY_drawerLayout);
         menu_NAV_navigationDrawer = findViewById(R.id.menu_NAV_navigationDrawer);
-        main_TLB_toolbar = findViewById(R.id.main_TLB_toolbar);
-        main_NVG_bottomNavigation = findViewById(R.id.main_NVG_bottomNavigation);
+        menu_TLB_toolbar = findViewById(R.id.menu_TLB_toolbar);
+        menu_NVG_bottomNavigation = findViewById(R.id.menu_NVG_bottomNavigation);
     }
 
     private void initViews() {
-        setSupportActionBar(main_TLB_toolbar);
-        updateTile(R.id.menu_LBL_profile);
-        initFragments(new Fragment_Profile());
+        setSupportActionBar(menu_TLB_toolbar);
 
-        main_NVG_bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+        if (getIntent().getBooleanExtra(Constants.EXTRA_GO_TO_ACHIEVEMENTS, false)) {
+            replaceFragment(R.id.menu_LBL_achievements);
+        } else {
+            replaceFragment(R.id.menu_LBL_profile);
+        }
+
+        menu_NVG_bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 replaceFragment(item.getItemId());
@@ -85,17 +74,11 @@ public class Activity_Menu extends AppCompatActivity {
         });
     }
 
-    private void completeUserData() {
-        Intent myIntent = new Intent(this, Activity_Edit_Profile.class);
-        startActivity(myIntent);
-        finish();
-    }
-
     private void navigationDrawer() {
         menu_NAV_navigationDrawer.bringToFront();
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
                 menu_LAY_drawerLayout,
-                main_TLB_toolbar,
+                menu_TLB_toolbar,
                 R.string.navigation_drawer_open,
                 R.string.navigation_drawer_close);
 
@@ -126,19 +109,16 @@ public class Activity_Menu extends AppCompatActivity {
     private void openSettings() {
         Intent myIntent = new Intent(this, Activity_Settings.class);
         startActivity(myIntent);
-        finish();
     }
 
     private void openEditProfile() {
         Intent myIntent = new Intent(this, Activity_Edit_Profile.class);
         startActivity(myIntent);
-        finish();
     }
 
     private void logOut() {
         FirebaseAuth.getInstance().signOut();
-        MySP.getInstance().removeKey(MySP.KEYS.USER_DATA);
-        MySP.getInstance().removeKey(MySP.KEYS.FRIENDS_DATA);
+        MySP.getInstance().removeKey(MySP.KEYS.MY_WEIGHT);
 
         Intent myIntent = new Intent(this, Activity_Login.class);
         startActivity(myIntent);
@@ -191,13 +171,9 @@ public class Activity_Menu extends AppCompatActivity {
     }
 
     private void initFragments(Fragment selectedFragment) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
-        selectedFragment.setArguments(bundle);
-
         getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.main_FRG_selectedFragment, selectedFragment)
+                .replace(R.id.menu_FRG_selectedFragment, selectedFragment)
                 .commit();
     }
 }

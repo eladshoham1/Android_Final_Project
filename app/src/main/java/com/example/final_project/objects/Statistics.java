@@ -1,5 +1,7 @@
 package com.example.final_project.objects;
 
+import com.example.final_project.utils.Constants;
+
 import java.util.ArrayList;
 
 public class Statistics {
@@ -12,7 +14,7 @@ public class Statistics {
     private double totalDistance = 0.0;
     private double averageSpeed = 0.0;
     private double maxSpeed = 0.0;
-    private double totalAverageSpeed = 0;
+    private double totalAverageSpeed = 0.0;
     private int averageCalories = 0;
     private int maxCalories = 0;
     private int totalCalories = 0;
@@ -179,7 +181,7 @@ public class Statistics {
         }
 
         setAverageTime(this.totalTime / this.numOfRuns);
-        setAverageSpeed(this.totalDistance / (this.totalTime / (1000.0 * 60.0 * 60.0)));
+        setAverageSpeed(this.totalDistance / (this.totalTime / Constants.MILLISECOND_TO_HOURS));
         setAverageDistance(this.totalDistance / this.numOfRuns);
         setAverageCalories(this.totalCalories / this.numOfRuns);
     }

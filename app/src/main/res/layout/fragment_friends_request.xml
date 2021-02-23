@@ -9,6 +9,6 @@
         android:id="@+id/friends_request_LST_friendsRequest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/list_friends_requests" />
+        tools:listitem="@layout/list_friends" />
 
 </FrameLayout>

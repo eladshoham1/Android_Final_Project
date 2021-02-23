@@ -1,5 +1,7 @@
 package com.example.final_project.fragments.running;
 
+import android.graphics.Color;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,12 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.final_project.R;
+import com.example.final_project.utils.Constants;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 public class Fragment_Map extends Fragment {
     private SupportMapFragment supportMapFragment;
@@ -27,20 +33,32 @@ public class Fragment_Map extends Fragment {
         return view;
     }
 
-    public void addMarker(double latitude, double longitude) {
+    public void updateMap(ArrayList<Location> locations) {
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
-                LatLng latLng = new LatLng(latitude, longitude);
+                Location currentLocation = locations.get(locations.size() - 1);
+                LatLng latLng = new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude());
                 MarkerOptions markerOptions = new MarkerOptions().position(latLng);
-                markerOptions.title(latLng.latitude + " : " + latLng.longitude);
 
                 googleMap.clear();
                 googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(
-                        latLng, 16
+                        latLng, Constants.MAP_ZOOM
                 ));
                 googleMap.addMarker(markerOptions);
+                googleMap.addPolyline(getPolylineOptions(locations));
             }
         });
+    }
+
+    private PolylineOptions getPolylineOptions(ArrayList<Location> locations) {
+        PolylineOptions polylineOptions = new PolylineOptions().width(Constants.MAP_POLYLINE_WIDTH).color(Color.BLUE).geodesic(true);
+
+        for (Location location : locations) {
+            LatLng point = new LatLng(location.getLatitude(), location.getLongitude());
+            polylineOptions.add(point);
+        }
+
+        return polylineOptions;
     }
 }

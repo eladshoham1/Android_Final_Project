@@ -281,8 +281,8 @@ public class Activity_Compete_Friend extends AppCompatActivity {
         double friendAverageDistance = friendStatistics.getAverageDistance();
         double sumAverageDistance = myAverageDistance + friendAverageDistance;
 
-        compete_friend_LBL_myAverageDistance.setText(MyStrings.twoDigitsAfterPoint(myAverageDistance));
-        compete_friend_LBL_friendAverageDistance.setText(MyStrings.twoDigitsAfterPoint(friendAverageDistance));
+        compete_friend_LBL_myAverageDistance.setText(MyStrings.threeDigitsAfterPoint(myAverageDistance));
+        compete_friend_LBL_friendAverageDistance.setText(MyStrings.threeDigitsAfterPoint(friendAverageDistance));
 
         if (sumAverageDistance != 0) {
             int progress = (int) Math.round((myAverageDistance / sumAverageDistance) * Constants.FULL_PERCENTAGE);
@@ -297,8 +297,8 @@ public class Activity_Compete_Friend extends AppCompatActivity {
         double friendMaxDistance = friendStatistics.getMaxDistance();
         double sumMaxDistance = myMaxDistance + friendMaxDistance;
 
-        compete_friend_LBL_myMaxDistance.setText(MyStrings.twoDigitsAfterPoint(myMaxDistance));
-        compete_friend_LBL_friendMaxDistance.setText(MyStrings.twoDigitsAfterPoint(friendMaxDistance));
+        compete_friend_LBL_myMaxDistance.setText(MyStrings.threeDigitsAfterPoint(myMaxDistance));
+        compete_friend_LBL_friendMaxDistance.setText(MyStrings.threeDigitsAfterPoint(friendMaxDistance));
 
         if (sumMaxDistance != 0) {
             int progress = (int) Math.round((myMaxDistance / sumMaxDistance) * Constants.FULL_PERCENTAGE);
@@ -313,8 +313,8 @@ public class Activity_Compete_Friend extends AppCompatActivity {
         double friendTotalDistance = friendStatistics.getTotalDistance();
         double sumTotalDistance = myTotalDistance + friendTotalDistance;
 
-        compete_friend_LBL_myTotalDistance.setText(MyStrings.twoDigitsAfterPoint(myTotalDistance));
-        compete_friend_LBL_friendTotalDistance.setText(MyStrings.twoDigitsAfterPoint(friendTotalDistance));
+        compete_friend_LBL_myTotalDistance.setText(MyStrings.threeDigitsAfterPoint(myTotalDistance));
+        compete_friend_LBL_friendTotalDistance.setText(MyStrings.threeDigitsAfterPoint(friendTotalDistance));
 
         if (sumTotalDistance != 0) {
             int progress = (int) Math.round((myTotalDistance / sumTotalDistance) * Constants.FULL_PERCENTAGE);
@@ -342,7 +342,7 @@ public class Activity_Compete_Friend extends AppCompatActivity {
 
     private void updateMaxCalories() {
         int myMaxCalories = myStatistics.getMaxCalories();
-        int friendMaxCalories = friendStatistics.getNumOfRuns();
+        int friendMaxCalories = friendStatistics.getMaxCalories();
         int sumMaxCalories = myMaxCalories + friendMaxCalories;
 
         compete_friend_LBL_myMaxCalories.setText("" + myMaxCalories);

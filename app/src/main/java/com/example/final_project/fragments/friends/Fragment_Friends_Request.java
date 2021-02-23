@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 
 import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Friend_Profile;
-import com.example.final_project.adapters.Adapter_Friend_Request;
+import com.example.final_project.adapters.Adapter_Friend;
+import com.example.final_project.callbacks.CallBack_Friends;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -31,9 +31,8 @@ import java.util.Map;
 public class Fragment_Friends_Request extends Fragment {
     private RecyclerView friends_request_LST_friendsRequest;
 
-    private HashMap<String, String> friendsStatus;
     private ArrayList<User> friendsRequests;
-    private Adapter_Friend_Request adapter_friend_request;
+    private Adapter_Friend adapter_friend;
     private String myID;
 
     @Override
@@ -41,11 +40,11 @@ public class Fragment_Friends_Request extends Fragment {
         View view = inflater.inflate(R.layout.fragment_friends_request, container, false);
         findViews(view);
         setUserID();
+        showAllFriendsRequests();
         setAllFriendsRequests();
 
         return view;
     }
-
 
     private void findViews(View view) {
         friends_request_LST_friendsRequest = view.findViewById(R.id.friends_request_LST_friendsRequest);
@@ -56,15 +55,20 @@ public class Fragment_Friends_Request extends Fragment {
     }
 
     private void setAllFriendsRequests() {
-        String friendsStatusString = MySP.getInstance().getString(MySP.KEYS.FRIENDS_DATA, "");
+        MyDB.readFriendsStatusData(new CallBack_Friends() {
+            @Override
+            public void onFriendsReady(HashMap<String, String> friendsStatus) {
+                readAllFriendsRequestData(friendsStatus);
+            }
 
-        if (!friendsStatusString.isEmpty()) {
-            friendsStatus = new Gson().fromJson(friendsStatusString, HashMap.class);
-            readAllFriendsRequestData();
-        }
+            @Override
+            public void onFriendsFailure(String msg) {
+                MySignal.getInstance().toast(msg);
+            }
+        });
     }
 
-    private void readAllFriendsRequestData() {
+    private void readAllFriendsRequestData(HashMap<String, String> friendsStatus) {
         friendsRequests = new ArrayList<>();
 
         for (Map.Entry status : friendsStatus.entrySet()) {
@@ -78,8 +82,7 @@ public class Fragment_Friends_Request extends Fragment {
         MyDB.readUserData(key, new CallBack_User() {
             @Override
             public void onUserReady(User user) {
-                friendsRequests.add(user);
-                showAllFriendsRequests();
+                adapter_friend.addItem(user);
             }
 
             @Override
@@ -91,24 +94,34 @@ public class Fragment_Friends_Request extends Fragment {
 
     private void showAllFriendsRequests() {
         friends_request_LST_friendsRequest.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter_friend_request = new Adapter_Friend_Request(getContext(), friendsRequests);
-        adapter_friend_request.setClickListener(new Adapter_Friend_Request.ItemClickListener() {
+        adapter_friend = new Adapter_Friend(getContext(), Adapter_Friend.FRIENDS_STATUS.FRIENDS_REQUESTS);
+        adapter_friend.setClickListener(new Adapter_Friend.ItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                openFriendFragment(friendsRequests.get(position));
+                openFriendFragment(adapter_friend.getItem(position));
+            }
+
+            @Override
+            public void onCompeteClick(int position) {
+
+            }
+
+            @Override
+            public void onRemoveClick(int position) {
+
             }
 
             @Override
             public void onAcceptRequest(int position) {
-                acceptFriendRequest(friendsRequests.get(position).getUid());
+                acceptFriendRequest(adapter_friend.getItem(position));
             }
 
             @Override
             public void onRejectRequest(int position) {
-                rejectFriendRequest(friendsRequests.get(position).getUid());
+                rejectFriendRequest(adapter_friend.getItem(position));
             }
         });
-        friends_request_LST_friendsRequest.setAdapter(adapter_friend_request);
+        friends_request_LST_friendsRequest.setAdapter(adapter_friend);
     }
 
     private void openFriendFragment(User user) {
@@ -117,22 +130,22 @@ public class Fragment_Friends_Request extends Fragment {
         startActivity(myIntent);
     }
 
-    private void acceptFriendRequest(String userID) {
+    private void acceptFriendRequest(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
 
-        myRef.child(myID).child(userID).setValue(Constants.CURRENT_FRIEND_DB);
-        myRef.child(userID).child(myID).setValue(Constants.CURRENT_FRIEND_DB);
+        myRef.child(myID).child(user.getUid()).setValue(Constants.CURRENT_FRIEND_DB);
+        myRef.child(user.getUid()).child(myID).setValue(Constants.CURRENT_FRIEND_DB);
+        adapter_friend.removeItem(user);
     }
 
-    private void rejectFriendRequest(String userID) {
+    private void rejectFriendRequest(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference(Constants.FRIENDS_DB);
 
-        myRef.child(myID).child(userID).removeValue();
-        myRef.child(userID).child(myID).removeValue();
-
-        MySP.getInstance().putString(MySP.KEYS.FRIENDS_DATA, new Gson().toJson(friendsStatus));
+        myRef.child(myID).child(user.getUid()).removeValue();
+        myRef.child(user.getUid()).child(myID).removeValue();
+        adapter_friend.removeItem(user);
     }
 
 }

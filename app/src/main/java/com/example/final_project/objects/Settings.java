@@ -1,7 +1,6 @@
 package com.example.final_project.objects;
 
 public class Settings {
-    private boolean sound = true;
     private boolean picture = true;
     private boolean age = true;
     private boolean bmi = true;
@@ -10,22 +9,12 @@ public class Settings {
 
     public Settings() { }
 
-    public Settings(boolean sound, boolean picture, boolean age, boolean bmi, boolean height, boolean weight) {
-        this.sound = sound;
+    public Settings(boolean picture, boolean age, boolean bmi, boolean height, boolean weight) {
         this.picture = picture;
         this.age = age;
         this.bmi = bmi;
         this.height = height;
         this.weight = weight;
-    }
-
-    public boolean isSound() {
-        return sound;
-    }
-
-    public Settings setSound(boolean sound) {
-        this.sound = sound;
-        return this;
     }
 
     public boolean isPicture() {

@@ -13,11 +13,12 @@ import android.widget.TextView;
 
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_Settings;
-import com.example.final_project.callbacks.CallBack_UserPicture;
+import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.objects.Settings;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySP;
 import com.example.final_project.utils.MySignal;
 import com.example.final_project.utils.MyStrings;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -42,7 +43,6 @@ public class Fragment_Profile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
         findViews(view);
         initUser();
-        initViews();
 
         return view;
     }
@@ -58,16 +58,32 @@ public class Fragment_Profile extends Fragment {
         profile_LAY_bmi = view.findViewById(R.id.profile_LAY_bmi);
         profile_LAY_height = view.findViewById(R.id.profile_LAY_height);
         profile_LAY_weight = view.findViewById(R.id.profile_LAY_weight);
-
     }
 
     private void initUser() {
-        String profileString = getArguments().getString(Constants.EXTRA_USER_DETAILS);
-        profile = new Gson().fromJson(profileString, User.class);
+        if (getArguments() != null) {
+            String profileString = getArguments().getString(Constants.BUNDLE_USER_DETAILS);
+            profile = new Gson().fromJson(profileString, User.class);
+            initViews();
+        } else {
+            MyDB.readMyUserData(new CallBack_User() {
+                @Override
+                public void onUserReady(User user) {
+                    profile = user;
+                    initViews();
+                }
+
+                @Override
+                public void onUserFailure(String msg) {
+                    MySignal.getInstance().toast(msg);
+                }
+            });
+        }
     }
 
     private void initViews() {
         if (MyDB.getUid().equals(profile.getUid())) {
+            MySP.getInstance().putFloat(MySP.KEYS.MY_WEIGHT, (float) profile.getWeight());
             setView(new Settings());
         } else {
             MyDB.readSettings(profile.getUid(), new CallBack_Settings() {
@@ -131,15 +147,15 @@ public class Fragment_Profile extends Fragment {
         String status;
         int color;
 
-        if (bmi < 18.5) {
+        if (bmi < Constants.UNDER_WEIGHT_VALUE) {
             status = Constants.UNDER_WEIGHT;
             color = Color.RED;
-        } else if (bmi < 25) {
+        } else if (bmi < Constants.NORMAL_WEIGHT_VALUE) {
             status = Constants.NORMAL_WEIGHT;
             color = Color.GREEN;
-        } else if (bmi < 30) {
+        } else if (bmi < Constants.OVER_WEIGHT_VALUE) {
             status = Constants.OVER_WEIGHT;
-            color = Color.rgb(255,170, 0);
+            color = Color.rgb(Constants.COLOR_RED_VALUE,Constants.COLOR_GREEN_VALUE, Constants.COLOR_BLUE_VALUE);
         } else {
             status = Constants.OBESITY;
             color = Color.RED;
@@ -156,16 +172,11 @@ public class Fragment_Profile extends Fragment {
     }
 
     private void updateImage() {
-        if (profile == null) {
-            return;
+        if (!profile.getPictureUrl().isEmpty()) {
+            MySignal.getInstance().loadPicture(profile.getPictureUrl(), profile_IMG_picture);
+        } else {
+            MySignal.getInstance().loadPicture(null, profile_IMG_picture);
         }
-
-        MyDB.readUserPicture(profile.getUid(), new CallBack_UserPicture() {
-            @Override
-            public void onPictureReady(String urlString) {
-                MySignal.getInstance().loadPicture(urlString, profile_IMG_picture);
-            }
-        });
     }
 
 }

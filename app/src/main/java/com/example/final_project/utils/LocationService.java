@@ -5,7 +5,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.Looper;
 
@@ -40,20 +39,19 @@ public class LocationService extends Service {
         };
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        requestLocation();
+        return super.onStartCommand(intent, flags, startId);
+    }
+
     private void sendLocationData(Location currentLocation) {
         Intent intent = new Intent(Constants.ACT_LOC);
         intent.putExtra(Constants.LATITUDE, currentLocation.getLatitude());
         intent.putExtra(Constants.LONGITUDE, currentLocation.getLongitude());
         intent.putExtra(Constants.DURATION, currentLocation.getTime());
-        intent.putExtra(Constants.SPEED, currentLocation.getSpeed());
 
         sendBroadcast(intent);
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        requestLocation();
-        return super.onStartCommand(intent, flags, startId);
     }
 
     private void requestLocation() {
@@ -63,8 +61,8 @@ public class LocationService extends Service {
         }
 
         LocationRequest locationRequest = new LocationRequest();
-        locationRequest.setInterval(3000);
-        locationRequest.setFastestInterval(1000);
+        locationRequest.setInterval(Constants.TIME_INTERVAL);
+        locationRequest.setFastestInterval(Constants.TIME_FASTEST_INTERVAL);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper());
     }

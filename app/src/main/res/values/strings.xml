@@ -3,6 +3,7 @@
 
     <string name="google_maps_key" translatable="false">AIzaSyBeDIuVXO-RhHKVqZ1PyxGAdkzr0F6a9LA</string>
 
+    <string name="internet_error_message">No internet connection</string>
     <string name="phone_number">Phone Number</string>
     <string name="enter_code">Enter Code</string>
     <string name="ok_">OK</string>
@@ -22,6 +23,7 @@
     <string name="name_error">Must be not empty and max 12 characters</string>
     <string name="height_error">Must be between 100 to 250</string>
     <string name="weight_error">Must be between 30 to 200</string>
+    <string name="empty_error">Must be not empty</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -80,6 +82,6 @@
     <string name="stop">Stop</string>
     <string name="loading_location">Loading your location</string>
 
-    <string name="kilometer">km</string>
+    <string name="kilometer">KM</string>
 
 </resources>

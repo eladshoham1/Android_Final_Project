@@ -1,7 +1,6 @@
 package com.example.final_project.adapters;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_project.R;
-import com.example.final_project.callbacks.CallBack_UserPicture;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySignal;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -22,15 +19,15 @@ import java.util.ArrayList;
 public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder> {
 
     private ArrayList<User> allUsers;
-    private ArrayList<String> allMyFriendsRequestsKeys;
+    private ArrayList<String> friendsRequestsKeys;
     private LayoutInflater mInflater;
     private ItemClickListener mClickListener;
 
     // data is passed into the constructor
-    public Adapter_User(Context context, ArrayList<User> allUsers, ArrayList<String> allMyFriendsRequestsKeys) {
+    public Adapter_User(Context context, ArrayList<User> allUsers, ArrayList<String> friendsRequestsKeys) {
         if (context != null) {
             this.allUsers = allUsers;
-            this.allMyFriendsRequestsKeys = allMyFriendsRequestsKeys;
+            this.friendsRequestsKeys = friendsRequestsKeys;
             this.mInflater = LayoutInflater.from(context);
         }
     }
@@ -46,8 +43,14 @@ public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         User user = allUsers.get(position);
+        String pictureUrl = user.getPictureUrl();
 
-        updateUserPicture(user, holder);
+        if (user.getSettings() != null && !user.getSettings().isPicture()) {
+            MySignal.getInstance().loadPicture(null, holder.users_IMG_picture);
+        } else {
+            MySignal.getInstance().loadPicture(pictureUrl, holder.users_IMG_picture);
+        }
+
         holder.users_LBL_userName.setText(user.getFirstName() + " " + user.getLastName());
 
         if (userInMyFriendsRequests(user.getUid())) {
@@ -59,23 +62,13 @@ public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder
         }
     }
 
-    public void updateUserPicture(User user, MyViewHolder holder) {
-        MyDB.readUserPicture(user.getUid(), new CallBack_UserPicture() {
-            @Override
-            public void onPictureReady(String urlString) {
-                MySignal.getInstance().loadPicture(urlString, holder.users_IMG_picture);
-            }
-        });
-    }
-
     public void filterList(ArrayList<User> filteredList) {
         allUsers = filteredList;
         notifyDataSetChanged();
     }
 
     private boolean userInMyFriendsRequests(String uid) {
-        for (String userID : allMyFriendsRequestsKeys) {
-            Log.d("check2", userID);
+        for (String userID : friendsRequestsKeys) {
             if (userID.equals(uid)) {
                 return true;
             }

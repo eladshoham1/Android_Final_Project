@@ -1,5 +1,6 @@
 package com.example.final_project.fragments.running;
 
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,6 +12,8 @@ import android.view.ViewGroup;
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_Map;
 
+import java.util.ArrayList;
+
 public class Fragment_Running extends Fragment {
     private Fragment_Map fragment_map;
     private Fragment_Running_Details fragment_running_details;
@@ -18,12 +21,12 @@ public class Fragment_Running extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_running, container, false);
-        findViews(view);
+        initViews();
 
         return view;
     }
 
-    private void findViews(View view) {
+    private void initViews() {
         fragment_running_details = new Fragment_Running_Details();
         fragment_running_details.setCallBack_map(callBack_map);
         getChildFragmentManager()
@@ -40,8 +43,8 @@ public class Fragment_Running extends Fragment {
 
     private CallBack_Map callBack_map = new CallBack_Map() {
         @Override
-        public void addMarker(double latitude, double longitude) {
-            fragment_map.addMarker(latitude, longitude);
+        public void updateMap(ArrayList<Location> locations) {
+            fragment_map.updateMap(locations);
         }
     };
 

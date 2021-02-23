@@ -13,22 +13,55 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/edit_profile_TLB_toolbar"
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/edit_profile_LAY_appBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:title="@string/edit_profile"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_height="wrap_content"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/edit_profile_IMG_picture"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/edit_profile_TLB_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                app:title="@string/edit_profile"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="18dp"
-            app:shapeAppearanceOverlay="@style/circleImageView"
-            android:src="@drawable/ic_profile" />
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/edit_profile_IMG_picture"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center_horizontal"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                android:src="@drawable/ic_profile" />
+
+            <ImageView
+                android:id="@+id/edit_profile_IMG_uploadPicture"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignEnd="@+id/edit_profile_IMG_picture"
+                android:layout_alignBottom="@+id/edit_profile_IMG_picture"
+                android:src="@drawable/ic_upload"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/edit_profile_IMG_deletePicture"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignEnd="@+id/edit_profile_IMG_picture"
+                android:layout_alignBottom="@+id/edit_profile_IMG_picture"
+                android:src="@drawable/ic_remove"
+                android:visibility="gone" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/edit_profile_LBL_firstName"
@@ -141,17 +174,31 @@
             app:strokeColor="@color/purple_500"
             android:text="@string/birth_date" />
 
-        <com.google.android.material.button.MaterialButton
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:id="@+id/edit_profile_BTN_saveChanges"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            app:cornerRadius="50dp"
-            app:strokeColor="@color/purple_500"
-            android:enabled="false"
-            android:text="@string/save_changes" />
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:id="@+id/edit_profile_BTN_saveChanges"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:cornerRadius="50dp"
+                app:strokeColor="@color/purple_500"
+                android:enabled="false"
+                android:text="@string/save_changes" />
+
+            <ProgressBar
+                android:id="@+id/edit_profile_PRB_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:visibility="gone" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

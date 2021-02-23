@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="internet_error_message">אין חיבור לאינטרנט</string>
     <string name="phone_number">מספר טלפון</string>
     <string name="enter_code">הכנס קוד</string>
     <string name="ok_">אישור</string>
@@ -27,6 +28,7 @@
     <string name="name_error">חייב לא להיות ריק ומקסימום 12 תווים</string>
     <string name="height_error">חייב להיות בין 100 ל250</string>
     <string name="weight_error">חייב להיות בין 30 ל200</string>
+    <string name="empty_error">חייב להכניס ערך</string>
 
     <string name="first_name">שם פרטי</string>
     <string name="last_name">שם משפחה</string>

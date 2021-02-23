@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,13 +38,8 @@ public class Activity_Settings extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        onBackPressed();
+        finish();
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        openMenuActivity();
     }
 
     private void findViews() {
@@ -92,7 +86,7 @@ public class Activity_Settings extends AppCompatActivity {
     }
 
     private void updateView(Settings settings) {
-        settings_SWT_sound.setChecked(settings.isSound());
+        settings_SWT_sound.setChecked(MySP.getInstance().getBoolean(MySP.KEYS.SOUND_ENABLE, true));
         settings_SWT_picture.setChecked(settings.isPicture());
         settings_SWT_age.setChecked(settings.isAge());
         settings_SWT_bmi.setChecked(settings.isBmi());
@@ -102,7 +96,6 @@ public class Activity_Settings extends AppCompatActivity {
 
     private void saveSettings() {
         Settings settings = new Settings();
-        settings.setSound(settings_SWT_sound.isChecked());
         settings.setPicture(settings_SWT_picture.isChecked());
         settings.setAge(settings_SWT_age.isChecked());
         settings.setBmi(settings_SWT_bmi.isChecked());
@@ -111,12 +104,7 @@ public class Activity_Settings extends AppCompatActivity {
 
         MySP.getInstance().putBoolean(MySP.KEYS.SOUND_ENABLE, settings_SWT_sound.isChecked());
         MyDB.updateSettings(settings);
-        openMenuActivity();
-    }
-
-    private void openMenuActivity() {
-        Intent myIntent = new Intent(this, Activity_Menu.class);
-        startActivity(myIntent);
         finish();
     }
+
 }

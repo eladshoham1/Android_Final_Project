@@ -26,13 +26,13 @@
         android:background="@color/white">
 
         <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/main_ABL_appBar"
+            android:id="@+id/menu_LAY_appBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:theme="@style/AppTheme.AppBarOverlay">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/main_TLB_toolbar"
+                android:id="@+id/menu_TLB_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimary"
@@ -40,15 +40,14 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-
         <FrameLayout
-            android:id="@+id/main_FRG_selectedFragment"
+            android:id="@+id/menu_FRG_selectedFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/main_NVG_bottomNavigation"
+            android:id="@+id/menu_NVG_bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:menu="@menu/menu_bottom_navigation" />

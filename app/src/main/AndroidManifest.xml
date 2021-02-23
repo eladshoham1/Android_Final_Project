@@ -3,7 +3,8 @@
     package="com.example.final_project">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -16,9 +17,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Final_Project">
-        <activity android:name=".activities.Activity_Compete_Friend"></activity>
-        <activity android:name=".activities.Activity_Friend_Profile" />
-        <activity android:name=".activities.Activity_Settings" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -53,6 +51,15 @@
             android:launchMode="singleTask"
             android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activities.Activity_Friend_Profile"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
+        <activity android:name=".activities.Activity_Settings"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
+        <activity android:name=".activities.Activity_Compete_Friend"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
 
         <service android:name=".utils.LocationService" />
     </application>

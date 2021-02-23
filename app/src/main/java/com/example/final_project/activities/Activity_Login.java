@@ -11,8 +11,9 @@ import android.widget.ProgressBar;
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.objects.User;
+import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
-import com.example.final_project.utils.MySP;
+import com.example.final_project.utils.MySignal;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
@@ -79,25 +80,23 @@ public class Activity_Login extends AppCompatActivity {
     private void startLoginProcess() {
         String phoneNumber = login_EDT_phone.getEditText().getText().toString().trim();
 
-        if (phoneNumber.isEmpty() || phoneNumber.length() < 10) {
-            login_EDT_phone.setError("Valid number is required");
-            login_EDT_phone.requestFocus();
-            return;
+        if (phoneNumber.isEmpty() || phoneNumber.length() < Constants.MAX_PHONE_NUMBER_LENGTH) {
+            MySignal.getInstance().toast("Valid number is required");
+            login_PRB_loading.setVisibility(View.GONE);
+        } else {
+            sendVerificationCode(phoneNumber);
         }
-
-        sendVerificationCode(phoneNumber);
     }
 
     private void codeEntered() {
         String code = login_EDT_phone.getEditText().getText().toString().trim();
 
-        if (code.isEmpty() || code.length() < 6) {
-            login_EDT_phone.setError("Wrong code");
-            login_EDT_phone.requestFocus();
-            return;
+        if (code.isEmpty() || code.length() < Constants.MAX_CODE_LENGTH) {
+            MySignal.getInstance().toast("Valid code is required");
+            login_PRB_loading.setVisibility(View.GONE);
+        } else {
+            verifyCode(code);
         }
-
-        verifyCode(code);
     }
 
     private void verifyCode(String code) {
@@ -115,8 +114,7 @@ public class Activity_Login extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             readUserData();
                         } else {
-                            login_EDT_phone.setError("Wrong Code");
-                            login_EDT_phone.requestFocus();
+                            MySignal.getInstance().toast("Wrong Code");
                             updateUI();
                         }
                     }
@@ -141,8 +139,12 @@ public class Activity_Login extends AppCompatActivity {
         Intent myIntent;
 
         if (user != null) {
-            myIntent = new Intent(this, Activity_Menu.class);
-            MySP.getInstance().putString(MySP.KEYS.USER_DATA, new Gson().toJson(user));
+            if (user.getUid().equals(MyDB.getUid())) {
+                myIntent = new Intent(this, Activity_Menu.class);
+                myIntent.putExtra(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
+            } else {
+                myIntent = new Intent(this, Activity_Edit_Profile.class);
+            }
         } else {
             myIntent = new Intent(this, Activity_Edit_Profile.class);
         }
@@ -155,7 +157,7 @@ public class Activity_Login extends AppCompatActivity {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         PhoneAuthOptions options = PhoneAuthOptions.newBuilder(firebaseAuth)
                 .setPhoneNumber(phoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
+                .setTimeout(Constants.LOGIN_TIME_OUT, TimeUnit.SECONDS)
                 .setActivity(this)
                 .setCallbacks(onVerificationStateChangedCallbacks)
                 .build();
@@ -183,17 +185,8 @@ public class Activity_Login extends AppCompatActivity {
         }
 
         @Override
-        public void onCodeAutoRetrievalTimeOut(@NonNull String s) {
-            super.onCodeAutoRetrievalTimeOut(s);
-
-            login_EDT_phone.setError("Time out, please try again");
-            login_EDT_phone.requestFocus();
-        }
-
-        @Override
         public void onVerificationFailed(FirebaseException e) {
-            login_EDT_phone.setError("Wrong Number");
-            login_EDT_phone.requestFocus();
+            MySignal.getInstance().toast("Wrong Number");
             login_state = LOGIN_STATE.ENTERING_NUMBER;
             updateUI();
         }
