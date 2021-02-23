@@ -1,6 +1,6 @@
 # Run Tracker - Android final project
 
-## About The Project
+### About The Project
 
 Run Tracker is a running application for android devices developed by Elad Shoham for android course final project.
 
