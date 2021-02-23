@@ -3,8 +3,8 @@
 ### About The Project
 
 Run Tracker is a running application for android devices developed by Elad Shoham for android course final project.
-The application allow to register as a user and start tracking users' runs and seeing the general statistics about all runs and the history of each run individually.
-In addition, there is an option to add friends to the app and compete with them in statistics to determine who runs faster, who is faster, who burns more calories, etc ...
+The application allow to register as a user and start tracking his runs and seeing the general statistics about all runs and the history of each run individually.
+In addition, there is an option to add friends to the app and compete with them in statistics to determine who runs more, who is faster, who burns more calories, etc ...
 
 
 ### Built With
