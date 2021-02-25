@@ -15,7 +15,11 @@ In addition, there is an option to add friends to the app and compete with them 
 
 ### Images
 
-![Profile](https://imgur.com/Oc4qg2h)
-![Friends](https://imgur.com/8gtNgbK)
-![Running](https://imgur.com/7fJP9uk)
-![Achievements](https://imgur.com/g4lCzlG)
+<img src="https://firebasestorage.googleapis.com/v0/b/run-tracker-app-74976.appspot.com/o/images%2Fprofile.png?alt=media&token=03d8543d-728f-4704-babe-9fff45da4c55" 
+alt="Profile" height="400" width="220"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/run-tracker-app-74976.appspot.com/o/images%2Ffriends.png?alt=media&token=a9bbb84a-80da-4452-8372-d7bac13c9cd9" 
+alt="Friends" height="400" width="220"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/run-tracker-app-74976.appspot.com/o/images%2Frunning.png?alt=media&token=ec1511a3-ddc0-49f6-842d-7b2c80815412" 
+alt="Running" height="400" width="220"/>
+<img src="https://firebasestorage.googleapis.com/v0/b/run-tracker-app-74976.appspot.com/o/images%2Fachievements.png?alt=media&token=a1235db4-4685-449b-87a8-0348bd25a7f3" 
+alt="Achievements" height="400" width="220"/>
