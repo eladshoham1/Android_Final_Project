@@ -9,7 +9,6 @@ public class MySP {
         public static final String MY_SP = "MY_SP";
         public static final String SOUND_ENABLE = "SOUND_ENABLE";
         public static final String MY_WEIGHT = "MY_WEIGHT";
-        public static final String RUN_DETAILS = "RUN_DETAILS";
     }
 
     private static MySP instance;
@@ -47,16 +46,6 @@ public class MySP {
 
     public float getFloat(String key, float def) {
         return prefs.getFloat(key, def);
-    }
-
-    public void putString(String key, String value) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString(key, value);
-        editor.apply();
-    }
-
-    public String getString(String key, String def) {
-        return prefs.getString(key, def);
     }
 
     public void removeKey(String key) {

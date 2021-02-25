@@ -3,7 +3,6 @@ package com.example.final_project.fragments.running;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,12 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +24,6 @@ import android.widget.TextView;
 
 import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Run_Details;
-import com.example.final_project.adapters.Adapter_Friend;
 import com.example.final_project.callbacks.CallBack_Map;
 import com.example.final_project.objects.Run;
 import com.example.final_project.utils.Constants;
@@ -47,8 +43,7 @@ public class Fragment_Running_Details extends Fragment {
         START,
         PAUSE,
         CONTINUE,
-        STOP,
-        RUN_BACK
+        STOP
     }
 
     private Context context;
@@ -74,10 +69,8 @@ public class Fragment_Running_Details extends Fragment {
     private long timeSwapBuff = 0L;
 
     private Run run;
-    private Location startLocation;
     private ArrayList<Location> locations = null;
     private double totalDistance = 0.0;
-    private double speed = 0.0;
     private double maxSpeed = 0.0;
     private int calories = 0;
 
@@ -94,20 +87,6 @@ public class Fragment_Running_Details extends Fragment {
 
         return view;
     }
-
-    @Override
-    public void onStop() {
-        /*if (running_state == RUNNING_STATE.START || running_state == RUNNING_STATE.RUN_BACK) {
-            saveAllRunningDetails();
-        }*/
-
-        super.onStop();
-    }
-
-    /*private void saveAllRunningDetails() {
-        setRunDetails();
-        MySP.getInstance().putString(MySP.KEYS.RUN_DETAILS, new Gson().toJson(run));
-    }*/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -164,81 +143,6 @@ public class Fragment_Running_Details extends Fragment {
         });
     }
 
-    private void startService() {
-        if (!statusCheck()) {
-            return;
-        }
-
-        running_state = RUNNING_STATE.START;
-        running_BTN_start.setVisibility(View.GONE);
-        running_LAY_loadingLocation.setVisibility(View.VISIBLE);
-
-        LocationBroadcastReceiver receiver = new LocationBroadcastReceiver();
-        IntentFilter filter = new IntentFilter(Constants.ACT_LOC);
-        context.registerReceiver(receiver, filter);
-        serviceIntent = new Intent(context, LocationService.class);
-        context.startService(serviceIntent);
-    }
-
-    public boolean statusCheck() {
-        final LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-
-        if (!manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            MySignal.getInstance().toast("You must turn on location in order to run");
-            return false;
-        }
-
-        return true;
-    }
-
-    private void startTimer() {
-        startTime = System.currentTimeMillis();
-        run = new Run().setStartTime(startTime);
-        start();
-
-        running_state = RUNNING_STATE.START;
-        updateView();
-    }
-
-    private void startRunning() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, Constants.LOCATION_REQUEST_CODE);
-            } else {
-                startService();
-            }
-        } else {
-            startService();
-        }
-    }
-
-    private void pauseRunning() {
-        timeSwapBuff += timeInMilliseconds;
-        stop();
-
-        running_state = RUNNING_STATE.PAUSE;
-        updateView();
-    }
-
-    private void continueRunning() {
-        startTime = System.currentTimeMillis();
-        start();
-
-        running_state = RUNNING_STATE.CONTINUE;
-        updateView();
-    }
-
-    private void stopRunning() {
-        running_state = RUNNING_STATE.STOP;
-        updateView();
-
-        stop();
-        endRun();
-
-        timeInMilliseconds = 0L;
-        timeSwapBuff = 0L;
-    }
-
     private void updateView() {
         switch (running_state) {
             case START:
@@ -262,52 +166,73 @@ public class Fragment_Running_Details extends Fragment {
         }
     }
 
-    private void endRun() {
-        context.stopService(serviceIntent);
-        MySignal.getInstance().playSound(R.raw.snd_end_running);
-        setRunDetails();
-        MyDB.updateRun(run);
+    private void startRunning() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[] { Manifest.permission.ACCESS_FINE_LOCATION }, Constants.LOCATION_REQUEST_CODE);
+            } else {
+                startService();
+            }
+        } else {
+            startService();
+        }
+    }
 
-        initRunDetails();
+    private void pauseRunning() {
+        timeSwapBuff += timeInMilliseconds;
+        running_state = RUNNING_STATE.PAUSE;
+        updateView();
+        stop();
+    }
+
+    private void continueRunning() {
+        startTime = System.currentTimeMillis();
+        running_state = RUNNING_STATE.CONTINUE;
+        updateView();
+        start();
+    }
+
+    private void stopRunning() {
+        stop();
+        running_state = RUNNING_STATE.STOP;
+        updateView();
+        endRun();
+    }
+
+    private void startService() {
+        if (!statusCheck()) {
+            return;
+        }
+
+        running_state = RUNNING_STATE.START;
         running_BTN_start.setVisibility(View.GONE);
-        openRunDetailsActivity(run);
+        running_LAY_loadingLocation.setVisibility(View.VISIBLE);
+
+        LocationBroadcastReceiver receiver = new LocationBroadcastReceiver();
+        IntentFilter filter = new IntentFilter(Constants.ACT_LOC);
+        context.registerReceiver(receiver, filter);
+        serviceIntent = new Intent(context, LocationService.class);
+        getActivity().startService(serviceIntent);
     }
 
-    private void initRunDetails() {
-        startTime = 0L;
-        duration = 0L;
-        timeInMilliseconds = 0L;
-        timeSwapBuff = 0L;
-        startLocation = locations.get(0);
-        locations = null;
+    public boolean statusCheck() {
+        final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
-        running_LBL_duration.setText(MyStrings.makeDurationString(duration));
-        running_LBL_distance.setText("0");
-        running_LBL_speed.setText("0");
-        running_LBL_calories.setText("0");
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            MySignal.getInstance().toast("You must turn on location in order to run");
+            return false;
+        }
+
+        return true;
     }
 
-    private void openRunDetailsActivity(Run run) {
-        Intent myIntent = new Intent(context, Activity_Run_Details.class);
-        myIntent.putExtra(Constants.EXTRA_RUN_DETAILS, new Gson().toJson(run));
-        myIntent.putExtra(Constants.EXTRA_OPEN_FROM_RUNNING, true);
-        startActivity(myIntent);
-        getActivity().finish();
-        getActivity().finish();
-    }
+    private void startTimer() {
+        startTime = System.currentTimeMillis();
+        run = new Run().setStartTime(startTime);
+        start();
 
-    private Run setRunDetails() {
-        double timeInHours = duration / Constants.METERS_TO_KILOMETERS;
-        double averageSpeed = totalDistance / timeInHours;
-
-        run.setEndTime(System.currentTimeMillis())
-                .setDuration(duration)
-                .setDistance(totalDistance)
-                .setAverageSpeed(averageSpeed)
-                .setMaxSpeed(maxSpeed)
-                .setCalories(calories);
-
-        return run;
+        running_state = RUNNING_STATE.START;
+        updateView();
     }
 
     private Runnable runnable = new Runnable() {
@@ -355,14 +280,6 @@ public class Fragment_Running_Details extends Fragment {
         updateViewDetails(speed);
     }
 
-    private Location getCurrentLocation() {
-        if (locations != null && locations.size() > 0) {
-            return locations.get(locations.size() - 1);
-        }
-
-        return null;
-    }
-
     private void updateMap() {
         if (callBack_map != null) {
             callBack_map.updateMap(locations);
@@ -375,12 +292,20 @@ public class Fragment_Running_Details extends Fragment {
         running_LBL_calories.setText("" + calories);
     }
 
+    private Location getLastLocation() {
+        if (locations != null && locations.size() > 0) {
+            return locations.get(locations.size() - 1);
+        }
+
+        return null;
+    }
+
     private double getDistance(Location currentLocation) {
-        return currentLocation.distanceTo(getCurrentLocation()) / Constants.METERS_TO_KILOMETERS;
+        return currentLocation.distanceTo(getLastLocation()) / Constants.METERS_TO_KILOMETERS;
     }
 
     private double getSpeed(Location currentLocation, double distance) {
-        double timeInMilliseconds = currentLocation.getTime() - getCurrentLocation().getTime();
+        double timeInMilliseconds = currentLocation.getTime() - getLastLocation().getTime();
         double timeInHours = timeInMilliseconds / Constants.MILLISECOND_TO_HOURS;
         double speed = 0.0;
 
@@ -394,6 +319,36 @@ public class Fragment_Running_Details extends Fragment {
     private int getCalories() {
         float weight = MySP.getInstance().getFloat(MySP.KEYS.MY_WEIGHT, 0f);
         return (int) Math.floor(Constants.CALORIES_COEFFICIENT * weight * totalDistance);
+    }
+
+    private void endRun() {
+        getActivity().stopService(serviceIntent);
+        MySignal.getInstance().playSound(R.raw.snd_end_running);
+        setRunDetails();
+        MyDB.updateRun(run);
+        openRunDetailsActivity(run);
+    }
+
+    private Run setRunDetails() {
+        double timeInHours = duration / Constants.MILLISECOND_TO_HOURS;
+        double averageSpeed = totalDistance / timeInHours;
+
+        run.setEndTime(System.currentTimeMillis())
+                .setDuration(duration)
+                .setDistance(totalDistance)
+                .setAverageSpeed(averageSpeed)
+                .setMaxSpeed(maxSpeed)
+                .setCalories(calories);
+
+        return run;
+    }
+
+    private void openRunDetailsActivity(Run run) {
+        Intent myIntent = new Intent(context, Activity_Run_Details.class);
+        myIntent.putExtra(Constants.EXTRA_RUN_DETAILS, new Gson().toJson(run));
+        myIntent.putExtra(Constants.EXTRA_OPEN_FROM_RUNNING, true);
+        startActivity(myIntent);
+        getActivity().finish();
     }
 
     public class LocationBroadcastReceiver extends BroadcastReceiver {
@@ -417,6 +372,7 @@ public class Fragment_Running_Details extends Fragment {
                 updateRunDetails(currentLocation);
             }
         }
+
     }
 
 }

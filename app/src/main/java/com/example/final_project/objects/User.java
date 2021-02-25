@@ -1,7 +1,5 @@
 package com.example.final_project.objects;
 
-import java.util.Calendar;
-
 public class User {
     private String uid = "";
     private String pictureUrl = "";
@@ -10,14 +8,12 @@ public class User {
     private String phone = "";
     private double height = 0.0;
     private double weight = 0.0;
-    private int birthYear = 0;
-    private int birthMonth = 0;
-    private int birthDay = 0;
-    private Settings settings;
+    private BirthDate birthDate = null;
+    private Settings settings = null;
 
     public User() { }
 
-    public User(String uid, String pictureUrl, String firstName, String lastName, String phone, double height, double weight, int birthYear, int birthMonth, int birthDay, Settings settings) {
+    public User(String uid, String pictureUrl, String firstName, String lastName, String phone, double height, double weight, BirthDate birthDate, Settings settings) {
         this.uid = uid;
         this.pictureUrl = pictureUrl;
         this.firstName = firstName;
@@ -25,9 +21,7 @@ public class User {
         this.phone = phone;
         this.height = height;
         this.weight = weight;
-        this.birthYear = birthYear;
-        this.birthMonth = birthMonth;
-        this.birthDay = birthDay;
+        this.birthDate = birthDate;
         this.settings = settings;
     }
 
@@ -97,36 +91,19 @@ public class User {
     public double getBMI() {
         double bmi = 0.0;
 
-        if (height != 0)
+        if (height != 0) {
             bmi = weight / Math.pow((height / 100), 2);
+        }
 
         return bmi;
     }
 
-    public int getBirthYear() {
-        return birthYear;
+    public BirthDate getBirthDate() {
+        return birthDate;
     }
 
-    public User setBirthYear(int birthYear) {
-        this.birthYear = birthYear;
-        return this;
-    }
-
-    public int getBirthMonth() {
-        return birthMonth;
-    }
-
-    public User setBirthMonth(int birthMonth) {
-        this.birthMonth = birthMonth;
-        return this;
-    }
-
-    public int getBirthDay() {
-        return birthDay;
-    }
-
-    public User setBirthDay(int birthDay) {
-        this.birthDay = birthDay;
+    public User setBirthDate(BirthDate birthDate) {
+        this.birthDate = birthDate;
         return this;
     }
 
@@ -137,24 +114,6 @@ public class User {
     public User setSettings(Settings settings) {
         this.settings = settings;
         return this;
-    }
-
-    public int getAge() {
-        Calendar calenderToday = Calendar.getInstance();
-        int currentYear = calenderToday.get(Calendar.YEAR);
-        int currentMonth = calenderToday.get(Calendar.MONTH) + 1;
-        int todayDay = calenderToday.get(Calendar.DAY_OF_MONTH);
-        int age = currentYear - birthYear;
-
-        if (birthMonth > currentMonth) {
-            age--;
-        } else if (birthMonth == currentMonth) {
-            if (birthDay > todayDay){
-                age--;
-            }
-        }
-
-        return age;
     }
 
 }

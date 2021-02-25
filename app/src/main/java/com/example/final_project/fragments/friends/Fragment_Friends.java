@@ -74,7 +74,7 @@ public class Fragment_Friends extends Fragment {
     private void updateView(HashMap<String, String> friendsStatus) {
         BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(1).getOrCreateBadge();
         int countFriendsRequests = 0;
-        
+
         for (Map.Entry status : friendsStatus.entrySet()) {
             if (status.getValue().equals(Constants.RECEIVED_REQUEST_DB)) {
                 countFriendsRequests++;

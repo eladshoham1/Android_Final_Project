@@ -41,8 +41,9 @@ public class MyDB {
         FirebaseUser firebaseUser = getUser();
         String uid = "";
 
-        if (firebaseUser != null)
+        if (firebaseUser != null) {
             uid = firebaseUser.getUid();
+        }
 
         return uid;
     }
@@ -51,8 +52,9 @@ public class MyDB {
         FirebaseUser firebaseUser = getUser();
         String phoneNumber = "";
 
-        if (firebaseUser != null)
+        if (firebaseUser != null) {
             phoneNumber = firebaseUser.getPhoneNumber();
+        }
 
         return phoneNumber;
     }

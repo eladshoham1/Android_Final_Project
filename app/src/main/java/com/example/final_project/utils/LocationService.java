@@ -45,6 +45,15 @@ public class LocationService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if (fusedLocationProviderClient != null && locationCallback != null) {
+            fusedLocationProviderClient.removeLocationUpdates(locationCallback);
+        }
+    }
+
     private void sendLocationData(Location currentLocation) {
         Intent intent = new Intent(Constants.ACT_LOC);
         intent.putExtra(Constants.LATITUDE, currentLocation.getLatitude());

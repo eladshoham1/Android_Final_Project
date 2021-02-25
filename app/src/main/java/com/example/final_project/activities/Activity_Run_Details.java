@@ -27,8 +27,8 @@ public class Activity_Run_Details extends AppCompatActivity {
     private TextView run_details_LBL_averageSpeed;
     private TextView run_details_LBL_maxSpeed;
     private TextView run_details_LBL_calories;
+    private MaterialButton run_details_BTN_allRunsHistory;
     private MaterialButton run_details_BTN_delete;
-    private MaterialButton run_details_BTN_continue;
 
     private Run run;
 
@@ -50,7 +50,7 @@ public class Activity_Run_Details extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false)) {
-            openMenuActivity();
+            moveToRunsHistory();
         } else {
             super.onBackPressed();
         }
@@ -65,8 +65,8 @@ public class Activity_Run_Details extends AppCompatActivity {
         run_details_LBL_averageSpeed = findViewById(R.id.run_details_LBL_averageSpeed);
         run_details_LBL_maxSpeed = findViewById(R.id.run_details_LBL_maxSpeed);
         run_details_LBL_calories = findViewById(R.id.run_details_LBL_calories);
+        run_details_BTN_allRunsHistory = findViewById(R.id.run_details_BTN_allRunsHistory);
         run_details_BTN_delete = findViewById(R.id.run_details_BTN_delete);
-        run_details_BTN_continue = findViewById(R.id.run_details_BTN_continue);
     }
 
     private void initViews() {
@@ -77,10 +77,10 @@ public class Activity_Run_Details extends AppCompatActivity {
             }
         });
 
-        run_details_BTN_continue.setOnClickListener(new View.OnClickListener() {
+        run_details_BTN_allRunsHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openMenuActivity();
+                moveToRunsHistory();
             }
         });
 
@@ -104,7 +104,7 @@ public class Activity_Run_Details extends AppCompatActivity {
         run_details_LBL_calories.setText("" + run.getCalories());
     }
 
-    private void openMenuActivity() {
+    private void moveToRunsHistory() {
         Intent myIntent = new Intent(this, Activity_Menu.class);
         myIntent.putExtra(Constants.EXTRA_GO_TO_ACHIEVEMENTS, true);
         startActivity(myIntent);
@@ -113,7 +113,11 @@ public class Activity_Run_Details extends AppCompatActivity {
 
     private void deleteRun() {
         MyDB.deleteRun(run);
-        finish();
+        if (getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false)) {
+            moveToRunsHistory();
+        } else {
+            finish();
+        }
     }
 
 }

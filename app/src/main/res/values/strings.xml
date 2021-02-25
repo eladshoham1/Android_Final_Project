@@ -11,6 +11,7 @@
     <string name="login">Login</string>
     <string name="logout">Logout</string>
 
+    <string name="all_runs_history">All Runs History</string>
     <string name="delete">Delete</string>
 
     <string name="profile">Profile</string>

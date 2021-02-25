@@ -75,6 +75,8 @@ public class Fragment_My_Friends extends Fragment {
     }
 
     private void readFriendsData(ArrayList<String> friendsStatus) {
+        adapter_friend.clear();
+
         for (String key : friendsStatus) {
             MyDB.readUserData(key, new CallBack_User() {
                 @Override

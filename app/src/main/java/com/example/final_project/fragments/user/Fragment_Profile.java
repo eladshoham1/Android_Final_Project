@@ -113,8 +113,8 @@ public class Fragment_Profile extends Fragment {
             profile_IMG_picture.setImageResource(R.drawable.ic_profile);
         }
 
-        if (settings.isAge()) {
-            profile_LBL_age.setText("" + profile.getAge());
+        if (settings.isAge() && profile.getBirthDate() != null) {
+            profile_LBL_age.setText("" + profile.getBirthDate().getAge());
             profile_LAY_age.setVisibility(View.VISIBLE);
         } else {
             profile_LAY_age.setVisibility(View.GONE);

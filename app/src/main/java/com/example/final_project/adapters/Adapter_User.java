@@ -53,7 +53,7 @@ public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder
 
         holder.users_LBL_userName.setText(user.getFirstName() + " " + user.getLastName());
 
-        if (userInMyFriendsRequests(user.getUid())) {
+        if (friendsRequestsKeys.contains(user.getUid())) {
             holder.users_BTN_sendRequest.setVisibility(View.GONE);
             holder.users_BTN_cancelRequest.setVisibility(View.VISIBLE);
         } else {
@@ -65,16 +65,6 @@ public class Adapter_User extends RecyclerView.Adapter<Adapter_User.MyViewHolder
     public void filterList(ArrayList<User> filteredList) {
         allUsers = filteredList;
         notifyDataSetChanged();
-    }
-
-    private boolean userInMyFriendsRequests(String uid) {
-        for (String userID : friendsRequestsKeys) {
-            if (userID.equals(uid)) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     // total number of rows

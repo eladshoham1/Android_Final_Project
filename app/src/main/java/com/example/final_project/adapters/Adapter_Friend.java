@@ -105,6 +105,11 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
         notifyDataSetChanged();
     }
 
+    public void clear() {
+        friends.clear();
+        notifyDataSetChanged();
+    }
+
     // allows clicks events to be caught
     public void setClickListener(ItemClickListener itemClickListener) {
         this.mClickListener = itemClickListener;

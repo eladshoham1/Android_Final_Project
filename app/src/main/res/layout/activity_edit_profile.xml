@@ -177,7 +177,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
             android:orientation="vertical">
 
             <com.google.android.material.button.MaterialButton
@@ -185,7 +186,6 @@
                 android:id="@+id/edit_profile_BTN_saveChanges"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
                 app:cornerRadius="50dp"
                 app:strokeColor="@color/purple_500"
                 android:enabled="false"
@@ -195,7 +195,8 @@
                 android:id="@+id/edit_profile_PRB_loading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="14dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="12dp"
                 android:visibility="gone" />
 
         </LinearLayout>
