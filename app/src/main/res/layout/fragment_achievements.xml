@@ -5,8 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.user.Fragment_Achievements"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/white"
+    tools:context=".fragments.achievements.Fragment_Achievements">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/achievements_LAY_tabLayout"

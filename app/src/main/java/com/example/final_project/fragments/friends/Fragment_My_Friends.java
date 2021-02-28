@@ -128,12 +128,14 @@ public class Fragment_My_Friends extends Fragment {
         Intent myIntent = new Intent(getContext(), Activity_Friend_Profile.class);
         myIntent.putExtra(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
         startActivity(myIntent);
+        getActivity().finish();
     }
 
     private void friendsCompetition(String userID) {
         Intent myIntent = new Intent(getContext(), Activity_Compete_Friend.class);
         myIntent.putExtra(Constants.EXTRA_FRIEND_KEY, userID);
         startActivity(myIntent);
+        getActivity().finish();
     }
 
     private void removeFriend(User user) {

@@ -1,4 +1,4 @@
-package com.example.final_project.fragments.user;
+package com.example.final_project.fragments.achievements;
 
 import android.os.Bundle;
 
@@ -11,15 +11,11 @@ import android.view.ViewGroup;
 
 import com.example.final_project.R;
 import com.example.final_project.adapters.Adapter_ViewPager;
-import com.example.final_project.fragments.running.Fragment_Runs_History;
 import com.google.android.material.tabs.TabLayout;
 
 public class Fragment_Achievements extends Fragment {
     private TabLayout achievements_LAY_tabLayout;
     private ViewPager achievements_VPA_selectedPage;
-
-    private Fragment_Runs_History fragment_runs_history;
-    private Fragment_Statistics fragment_statistics;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -36,8 +32,8 @@ public class Fragment_Achievements extends Fragment {
     }
 
     private void initViews() {
-        fragment_runs_history = new Fragment_Runs_History();
-        fragment_statistics = new Fragment_Statistics();
+        Fragment_Runs_History fragment_runs_history = new Fragment_Runs_History();
+        Fragment_Statistics fragment_statistics = new Fragment_Statistics();
         achievements_LAY_tabLayout.setupWithViewPager(achievements_VPA_selectedPage);
 
         Adapter_ViewPager viewPagerAdapter = new Adapter_ViewPager(getChildFragmentManager(), 0);

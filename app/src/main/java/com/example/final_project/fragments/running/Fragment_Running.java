@@ -16,7 +16,6 @@ import java.util.ArrayList;
 
 public class Fragment_Running extends Fragment {
     private Fragment_Map fragment_map;
-    private Fragment_Running_Details fragment_running_details;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -27,7 +26,7 @@ public class Fragment_Running extends Fragment {
     }
 
     private void initViews() {
-        fragment_running_details = new Fragment_Running_Details();
+        Fragment_Running_Details fragment_running_details = new Fragment_Running_Details();
         fragment_running_details.setCallBack_map(callBack_map);
         getChildFragmentManager()
                 .beginTransaction()

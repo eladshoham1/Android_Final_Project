@@ -1,7 +1,6 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +27,7 @@ import com.google.gson.Gson;
 
 import java.util.concurrent.TimeUnit;
 
-public class Activity_Login extends AppCompatActivity {
+public class Activity_Login extends Activity_Base {
 
     private enum LOGIN_STATE {
         ENTERING_NUMBER,
@@ -164,7 +163,7 @@ public class Activity_Login extends AppCompatActivity {
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    private final PhoneAuthProvider.OnVerificationStateChangedCallbacks onVerificationStateChangedCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
@@ -185,7 +184,7 @@ public class Activity_Login extends AppCompatActivity {
         }
 
         @Override
-        public void onVerificationFailed(FirebaseException e) {
+        public void onVerificationFailed(@NonNull FirebaseException e) {
             MySignal.getInstance().toast("Wrong Number");
             login_state = LOGIN_STATE.ENTERING_NUMBER;
             updateUI();

@@ -8,6 +8,7 @@ import android.location.Location;
 import android.os.IBinder;
 import android.os.Looper;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -19,6 +20,7 @@ import com.google.android.gms.location.LocationServices;
 public class LocationService extends Service {
     private FusedLocationProviderClient fusedLocationProviderClient;
     private LocationCallback locationCallback;
+    private int numOfLocations;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -32,7 +34,7 @@ public class LocationService extends Service {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         locationCallback = new LocationCallback() {
             @Override
-            public void onLocationResult(LocationResult locationResult) {
+            public void onLocationResult(@NonNull LocationResult locationResult) {
                 super.onLocationResult(locationResult);
                 sendLocationData(locationResult.getLastLocation());
             }
@@ -55,12 +57,15 @@ public class LocationService extends Service {
     }
 
     private void sendLocationData(Location currentLocation) {
-        Intent intent = new Intent(Constants.ACT_LOC);
-        intent.putExtra(Constants.LATITUDE, currentLocation.getLatitude());
-        intent.putExtra(Constants.LONGITUDE, currentLocation.getLongitude());
-        intent.putExtra(Constants.DURATION, currentLocation.getTime());
+        if (numOfLocations != 0) {
+            Intent intent = new Intent(Constants.ACT_LOC);
+            intent.putExtra(Constants.LATITUDE, currentLocation.getLatitude());
+            intent.putExtra(Constants.LONGITUDE, currentLocation.getLongitude());
+            intent.putExtra(Constants.DURATION, currentLocation.getTime());
+            sendBroadcast(intent);
+        }
 
-        sendBroadcast(intent);
+        numOfLocations++;
     }
 
     private void requestLocation() {
@@ -69,6 +74,7 @@ public class LocationService extends Service {
             return;
         }
 
+        numOfLocations = 0;
         LocationRequest locationRequest = new LocationRequest();
         locationRequest.setInterval(Constants.TIME_INTERVAL);
         locationRequest.setFastestInterval(Constants.TIME_FASTEST_INTERVAL);

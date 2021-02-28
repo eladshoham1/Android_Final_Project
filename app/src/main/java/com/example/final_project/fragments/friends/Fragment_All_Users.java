@@ -3,6 +3,7 @@ package com.example.final_project.fragments.friends;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,8 +35,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment_All_Users extends Fragment {
-    private TextInputEditText all_users_EDT_searchFriends;
-    private RecyclerView all_users_LST_searchFriends;
+    private TextInputEditText all_users_EDT_searchUsers;
+    private RecyclerView all_users_LST_allUsers;
 
     private ArrayList<User> allUsers;
     private ArrayList<String> allFriendsKeys;
@@ -56,12 +57,12 @@ public class Fragment_All_Users extends Fragment {
     }
 
     private void findViews(View view) {
-        all_users_EDT_searchFriends = view.findViewById(R.id.all_users_EDT_searchUsers);
-        all_users_LST_searchFriends = view.findViewById(R.id.all_users_LST_allUsers);
+        all_users_EDT_searchUsers = view.findViewById(R.id.all_users_EDT_searchUsers);
+        all_users_LST_allUsers = view.findViewById(R.id.all_users_LST_allUsers);
     }
 
     private void initViews() {
-        all_users_EDT_searchFriends.addTextChangedListener(new TextWatcher() {
+        all_users_EDT_searchUsers.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -132,9 +133,9 @@ public class Fragment_All_Users extends Fragment {
 
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allUsers = new ArrayList<>();
-                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     User user = userSnapshot.getValue(User.class);
 
                     if (!userInFriends(user.getUid())) {
@@ -146,7 +147,7 @@ public class Fragment_All_Users extends Fragment {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 MySignal.getInstance().toast("Failed to read the all users data");
             }
         });
@@ -167,7 +168,7 @@ public class Fragment_All_Users extends Fragment {
     }
 
     private void showUsersView() {
-        all_users_LST_searchFriends.setLayoutManager(new LinearLayoutManager(getContext()));
+        all_users_LST_allUsers.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter_user = new Adapter_User(getContext(), allUsers, friendsRequestsKeys);
         adapter_user.setClickListener(new Adapter_User.ItemClickListener() {
             @Override
@@ -185,13 +186,14 @@ public class Fragment_All_Users extends Fragment {
                 cancelFriendRequest(adapter_user.getItem(position).getUid());
             }
         });
-        all_users_LST_searchFriends.setAdapter(adapter_user);
+        all_users_LST_allUsers.setAdapter(adapter_user);
     }
 
     private void openFriendFragment(User user) {
         Intent myIntent = new Intent(getContext(), Activity_Friend_Profile.class);
         myIntent.putExtra(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
         startActivity(myIntent);
+        getActivity().finish();
     }
 
     private void sendFriendRequest(String userID) {

@@ -1,4 +1,4 @@
-package com.example.final_project.fragments.user;
+package com.example.final_project.fragments.achievements;
 
 import android.os.Bundle;
 
@@ -80,9 +80,9 @@ public class Fragment_Statistics extends Fragment {
         statistics_LBL_totalTime.setText(MyStrings.makeDurationString(statistics.getTotalTime()));
         statistics_LBL_averageSpeed.setText(MyStrings.twoDigitsAfterPoint(statistics.getAverageSpeed()));
         statistics_LBL_maxSpeed.setText(MyStrings.twoDigitsAfterPoint(statistics.getMaxSpeed()));
-        statistics_LBL_averageDistance.setText(MyStrings.twoDigitsAfterPoint(statistics.getAverageDistance()));
-        statistics_LBL_maxDistance.setText(MyStrings.twoDigitsAfterPoint(statistics.getMaxDistance()));
-        statistics_LBL_totalDistance.setText(MyStrings.twoDigitsAfterPoint(statistics.getTotalDistance()));
+        statistics_LBL_averageDistance.setText(MyStrings.threeDigitsAfterPoint(statistics.getAverageDistance()));
+        statistics_LBL_maxDistance.setText(MyStrings.threeDigitsAfterPoint(statistics.getMaxDistance()));
+        statistics_LBL_totalDistance.setText(MyStrings.threeDigitsAfterPoint(statistics.getTotalDistance()));
         statistics_LBL_averageCalories.setText("" + statistics.getAverageCalories());
         statistics_LBL_maxCalories.setText("" + statistics.getMaxCalories());
         statistics_LBL_totalCalories.setText("" + statistics.getTotalCalories());

@@ -48,6 +48,7 @@ public class MySignal {
                 mp.reset();
                 mp.release();
             } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
         mp = null;
@@ -64,6 +65,7 @@ public class MySignal {
 
             mp.start();
         } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 

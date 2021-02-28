@@ -32,9 +32,7 @@ public class MyDB {
 
     private static FirebaseUser getUser() {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-
-        return firebaseUser;
+        return firebaseAuth.getCurrentUser();
     }
 
     public static String getUid() {
@@ -74,13 +72,13 @@ public class MyDB {
 
         myRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 callBack_user.onUserReady(user);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 callBack_user.onUserFailure("Fail to load user");
             }
         });
@@ -115,7 +113,7 @@ public class MyDB {
 
         myRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 HashMap<String, String> friendsStatus = new HashMap<>();
                 for (DataSnapshot statusSnapshot : dataSnapshot.getChildren()) {
                     if (!statusSnapshot.getKey().equals(getUid())) {
@@ -127,7 +125,7 @@ public class MyDB {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 callBack_friends.onFriendsFailure("Fail to load your friends");
             }
         });
@@ -149,7 +147,7 @@ public class MyDB {
 
         myRef.child(uid).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 allRuns.clear();
                 for (DataSnapshot runSnapshot : dataSnapshot.getChildren()) {
                     Run run = runSnapshot.getValue(Run.class);
@@ -160,7 +158,7 @@ public class MyDB {
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 callBack_runs.onRunsFailure("Fail to load runs");
             }
         });
@@ -181,13 +179,13 @@ public class MyDB {
 
         myRef.child(uid).child(Constants.SETTINGS_DB).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Settings settings = dataSnapshot.getValue(Settings.class);
                 callBack_settings.onSettingsReady(settings);
             }
 
             @Override
-            public void onCancelled(DatabaseError error) {
+            public void onCancelled(@NonNull DatabaseError error) {
                 callBack_settings.onSettingsFailure("Fail to load settings");
             }
         });

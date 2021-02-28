@@ -2,7 +2,6 @@ package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.DatePickerDialog;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -21,6 +19,7 @@ import android.widget.ProgressBar;
 import com.example.final_project.R;
 import com.example.final_project.callbacks.CallBack_User;
 import com.example.final_project.callbacks.CallBack_UserPicture;
+import com.example.final_project.objects.BirthDate;
 import com.example.final_project.objects.User;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
@@ -28,11 +27,10 @@ import com.example.final_project.utils.MySignal;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
 import com.google.android.material.textfield.TextInputLayout;
-import com.google.gson.Gson;
 
 import java.util.Calendar;
 
-public class Activity_Edit_Profile extends AppCompatActivity {
+public class Activity_Edit_Profile extends Activity_Base {
     private ShapeableImageView edit_profile_IMG_picture;
     private ImageView edit_profile_IMG_uploadPicture;
     private ImageView edit_profile_IMG_deletePicture;
@@ -45,6 +43,7 @@ public class Activity_Edit_Profile extends AppCompatActivity {
     private ProgressBar edit_profile_PRB_loading;
     private Toolbar edit_profile_TLB_toolbar;
 
+    private boolean userComplete = true;
     private User theUser;
     private Uri pictureUri;
     private boolean pictureExist;
@@ -67,8 +66,17 @@ public class Activity_Edit_Profile extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
+        onBackPressed();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (userComplete) {
+            openMenuActivity();
+        } else {
+            finish();
+        }
     }
 
     @Override
@@ -101,7 +109,17 @@ public class Activity_Edit_Profile extends AppCompatActivity {
         MyDB.readMyUserData(new CallBack_User() {
             @Override
             public void onUserReady(User user) {
-                theUser = user != null ? user : new User();
+                if (user != null) {
+                    if (user.getUid().equals(MyDB.getUid())) {
+                        theUser = user;
+                    } else {
+                        openMenuActivity();
+                    }
+                } else {
+                    theUser = new User();
+                    userComplete = false;
+                }
+
                 initViews();
                 setDetails();
             }
@@ -188,7 +206,7 @@ public class Activity_Edit_Profile extends AppCompatActivity {
             edit_profile_EDT_weight.setErrorEnabled(false);
         }
 
-        if (theUser.getAge() != 0) {
+        if (theUser.getBirthDate() != null) {
             birthDateValid = true;
             setSaveChangesButton();
         }
@@ -222,9 +240,9 @@ public class Activity_Edit_Profile extends AppCompatActivity {
 
     private void openDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        int year = theUser.getBirthYear() != 0 ? theUser.getBirthYear() : calendar.get(Calendar.YEAR);
-        int month = theUser.getBirthMonth() != 0 ? theUser.getBirthMonth() - 1 : calendar.get(Calendar.MONTH);
-        int day = theUser.getBirthDay() != 0 ? theUser.getBirthDay() : calendar.get(Calendar.DAY_OF_MONTH);
+        int year = theUser.getBirthDate() != null ? theUser.getBirthDate().getYear() : calendar.get(Calendar.YEAR);
+        int month = theUser.getBirthDate() != null ? theUser.getBirthDate().getMonth() - 1 : calendar.get(Calendar.MONTH);
+        int day = theUser.getBirthDate() != null ? theUser.getBirthDate().getDay() : calendar.get(Calendar.DAY_OF_MONTH);
 
         DatePickerDialog dialog = new DatePickerDialog(
                 this,
@@ -235,10 +253,7 @@ public class Activity_Edit_Profile extends AppCompatActivity {
     }
 
     private void updateSelectedBirthDate(int year, int month, int dayOfMonth) {
-        theUser.setBirthYear(year);
-        theUser.setBirthMonth(month + 1);
-        theUser.setBirthDay(dayOfMonth);
-
+        theUser.setBirthDate(new BirthDate(dayOfMonth, month + 1, year));
         birthDateValid = true;
         setSaveChangesButton();
     }
@@ -286,12 +301,6 @@ public class Activity_Edit_Profile extends AppCompatActivity {
         });
     }
 
-    private void openMenuActivity() {
-        Intent myIntent = new Intent(this, Activity_Menu.class);
-        startActivity(myIntent);
-        finish();
-    }
-
     private void updatePictureOptionView() {
         if (pictureExist) {
             edit_profile_IMG_uploadPicture.setVisibility(View.GONE);
@@ -314,10 +323,14 @@ public class Activity_Edit_Profile extends AppCompatActivity {
 
     private boolean checkMeasure(TextInputLayout textInputLayout, int errorMessage, int lowValue, int highValue) {
         String measureString = textInputLayout.getEditText().getText().toString().trim();
-        double measure;
+        double measure = 0.0;
 
         if (!measureString.isEmpty()) {
-            measure = Double.parseDouble(measureString);
+            try {
+                measure = Double.parseDouble(measureString);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
             if (measure < lowValue || measure > highValue) {
                 textInputLayout.setError(getResources().getString(errorMessage));

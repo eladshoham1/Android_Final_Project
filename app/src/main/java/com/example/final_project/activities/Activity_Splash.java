@@ -1,6 +1,5 @@
 package com.example.final_project.activities;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 
 import android.animation.Animator;
@@ -19,7 +18,7 @@ import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
 import com.google.gson.Gson;
 
-public class Activity_Splash extends AppCompatActivity {
+public class Activity_Splash extends Activity_Base {
     private ImageView splash_IMG_logo;
     private TextView splash_LBL_internetErrorMessage;
 

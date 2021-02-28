@@ -14,6 +14,7 @@ import com.example.final_project.adapters.Adapter_ViewPager;
 import com.example.final_project.callbacks.CallBack_Friends;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MyDB;
+import com.example.final_project.utils.MySignal;
 import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.tabs.TabLayout;
 
@@ -23,10 +24,6 @@ import java.util.Map;
 public class Fragment_Friends extends Fragment {
     private TabLayout friends_LAY_tabLayout;
     private ViewPager friends_VPA_selectedPage;
-
-    private Fragment_My_Friends fragment_my_friends;
-    private Fragment_Friends_Request fragment_friends_request;
-    private Fragment_All_Users fragment_search_friends;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,9 +41,9 @@ public class Fragment_Friends extends Fragment {
     }
 
     private void initViews() {
-        fragment_my_friends = new Fragment_My_Friends();
-        fragment_friends_request = new Fragment_Friends_Request();
-        fragment_search_friends = new Fragment_All_Users();
+        Fragment_My_Friends fragment_my_friends = new Fragment_My_Friends();
+        Fragment_Friends_Request fragment_friends_request = new Fragment_Friends_Request();
+        Fragment_All_Users fragment_search_friends = new Fragment_All_Users();
         friends_LAY_tabLayout.setupWithViewPager(friends_VPA_selectedPage);
 
         Adapter_ViewPager viewPagerAdapter = new Adapter_ViewPager(getChildFragmentManager(), 0);
@@ -66,13 +63,13 @@ public class Fragment_Friends extends Fragment {
 
             @Override
             public void onFriendsFailure(String msg) {
-
+                MySignal.getInstance().toast(msg);
             }
         });
     }
 
     private void updateView(HashMap<String, String> friendsStatus) {
-        BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(1).getOrCreateBadge();
+        BadgeDrawable badgeDrawable = friends_LAY_tabLayout.getTabAt(Constants.TAB_FRIENDS_REQUESTS).getOrCreateBadge();
         int countFriendsRequests = 0;
 
         for (Map.Entry status : friendsStatus.entrySet()) {

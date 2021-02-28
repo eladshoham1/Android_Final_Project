@@ -1,7 +1,6 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
@@ -18,7 +17,7 @@ import com.example.final_project.utils.MyStrings;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
 
-public class Activity_Run_Details extends AppCompatActivity {
+public class Activity_Run_Details extends Activity_Base {
     private Toolbar run_details_TLB_toolbar;
     private TextView run_details_LBL_startTime;
     private TextView run_details_LBL_endTime;
@@ -43,17 +42,13 @@ public class Activity_Run_Details extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
+        moveToRunsHistory();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onBackPressed() {
-        if (getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false)) {
-            moveToRunsHistory();
-        } else {
-            super.onBackPressed();
-        }
+        moveToRunsHistory();
     }
 
     private void findViews() {
@@ -89,11 +84,7 @@ public class Activity_Run_Details extends AppCompatActivity {
 
         setSupportActionBar(run_details_TLB_toolbar);
         getSupportActionBar().setTitle(MyStrings.makeDateString(run.getStartTime()));
-        if (getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false)) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-        } else {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        getSupportActionBar().setDisplayHomeAsUpEnabled(!getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false));
 
         run_details_LBL_startTime.setText(MyStrings.makeTimeString(run.getStartTime()));
         run_details_LBL_endTime.setText(MyStrings.makeTimeString(run.getEndTime()));
@@ -106,18 +97,14 @@ public class Activity_Run_Details extends AppCompatActivity {
 
     private void moveToRunsHistory() {
         Intent myIntent = new Intent(this, Activity_Menu.class);
-        myIntent.putExtra(Constants.EXTRA_GO_TO_ACHIEVEMENTS, true);
+        myIntent.putExtra(Constants.EXTRA_GO_TO_ACTIVITY, Constants.ACHIEVEMENTS_CODE);
         startActivity(myIntent);
         finish();
     }
 
     private void deleteRun() {
         MyDB.deleteRun(run);
-        if (getIntent().getBooleanExtra(Constants.EXTRA_OPEN_FROM_RUNNING, false)) {
-            moveToRunsHistory();
-        } else {
-            finish();
-        }
+        moveToRunsHistory();
     }
 
 }

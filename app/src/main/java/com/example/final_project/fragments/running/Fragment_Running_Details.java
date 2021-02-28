@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.example.final_project.R;
 import com.example.final_project.activities.Activity_Run_Details;
 import com.example.final_project.callbacks.CallBack_Map;
+import com.example.final_project.callbacks.CallBack_Run_Mode;
 import com.example.final_project.objects.Run;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.LocationService;
@@ -39,7 +40,7 @@ import java.util.ArrayList;
 
 public class Fragment_Running_Details extends Fragment {
 
-    private enum RUNNING_STATE {
+    public enum RUNNING_STATE {
         START,
         PAUSE,
         CONTINUE,
@@ -58,11 +59,12 @@ public class Fragment_Running_Details extends Fragment {
     private LinearLayout running_LAY_loadingLocation;
 
     private CallBack_Map callBack_map;
+    private CallBack_Run_Mode callBack_run_mode;
 
     private RUNNING_STATE running_state;
 
     private Intent serviceIntent;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private long startTime = 0L;
     private long duration = 0L;
     private long timeInMilliseconds = 0L;
@@ -76,6 +78,10 @@ public class Fragment_Running_Details extends Fragment {
 
     public void setCallBack_map(CallBack_Map callBack_map) {
         this.callBack_map = callBack_map;
+    }
+
+    public void setCallBack_run_mode(CallBack_Run_Mode callBack_run_mode) {
+        this.callBack_run_mode = callBack_run_mode;
     }
 
     @Override
@@ -114,6 +120,8 @@ public class Fragment_Running_Details extends Fragment {
     }
 
     private void initViews() {
+        setViews();
+
         running_BTN_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,7 +151,16 @@ public class Fragment_Running_Details extends Fragment {
         });
     }
 
+    private void setViews() {
+        running_LBL_duration.setText(MyStrings.makeDurationString(0));
+        running_LBL_distance.setText(MyStrings.threeDigitsAfterPoint(0.0));
+        running_LBL_speed.setText(MyStrings.twoDigitsAfterPoint(0.0));
+        running_LBL_calories.setText("0");
+    }
+
     private void updateView() {
+        updateRunMode();
+
         switch (running_state) {
             case START:
                 running_BTN_pause.setVisibility(View.VISIBLE);
@@ -228,7 +245,9 @@ public class Fragment_Running_Details extends Fragment {
 
     private void startTimer() {
         startTime = System.currentTimeMillis();
-        run = new Run().setStartTime(startTime);
+        if (run == null) {
+            run = new Run().setStartTime(startTime);
+        }
         start();
 
         running_state = RUNNING_STATE.START;
@@ -286,6 +305,12 @@ public class Fragment_Running_Details extends Fragment {
         }
     }
 
+    private void updateRunMode() {
+        if (callBack_run_mode != null) {
+            callBack_run_mode.setRunMode(running_state != RUNNING_STATE.STOP);
+        }
+    }
+
     private void updateViewDetails(double speed) {
         running_LBL_speed.setText(MyStrings.twoDigitsAfterPoint(speed));
         running_LBL_distance.setText(MyStrings.threeDigitsAfterPoint(totalDistance));
@@ -329,7 +354,7 @@ public class Fragment_Running_Details extends Fragment {
         openRunDetailsActivity(run);
     }
 
-    private Run setRunDetails() {
+    private void setRunDetails() {
         double timeInHours = duration / Constants.MILLISECOND_TO_HOURS;
         double averageSpeed = totalDistance / timeInHours;
 
@@ -339,8 +364,6 @@ public class Fragment_Running_Details extends Fragment {
                 .setAverageSpeed(averageSpeed)
                 .setMaxSpeed(maxSpeed)
                 .setCalories(calories);
-
-        return run;
     }
 
     private void openRunDetailsActivity(Run run) {

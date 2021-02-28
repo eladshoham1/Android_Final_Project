@@ -24,14 +24,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Fragment_Friends_Request extends Fragment {
     private RecyclerView friends_request_LST_friendsRequest;
 
-    private ArrayList<User> friendsRequests;
     private Adapter_Friend adapter_friend;
     private String myID;
 
@@ -69,8 +67,6 @@ public class Fragment_Friends_Request extends Fragment {
     }
 
     private void readAllFriendsRequestData(HashMap<String, String> friendsStatus) {
-        friendsRequests = new ArrayList<>();
-
         for (Map.Entry status : friendsStatus.entrySet()) {
             if (status.getValue().equals(Constants.RECEIVED_REQUEST_DB)) {
                 readFriendData((String) status.getKey());
@@ -128,6 +124,7 @@ public class Fragment_Friends_Request extends Fragment {
         Intent myIntent = new Intent(getContext(), Activity_Friend_Profile.class);
         myIntent.putExtra(Constants.EXTRA_USER_DETAILS, new Gson().toJson(user));
         startActivity(myIntent);
+        getActivity().finish();
     }
 
     private void acceptFriendRequest(User user) {

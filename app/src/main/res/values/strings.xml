@@ -6,7 +6,6 @@
     <string name="internet_error_message">No internet connection</string>
     <string name="phone_number">Phone Number</string>
     <string name="enter_code">Enter Code</string>
-    <string name="ok_">OK</string>
     <string name="continue_">Continue</string>
     <string name="login">Login</string>
     <string name="logout">Logout</string>
@@ -77,7 +76,6 @@
     <string name="distance">DISTANCE (KM)</string>
     <string name="speed">SPEED (KPH)</string>
     <string name="calories">CALORIES</string>
-    <string name="run">Run</string>
     <string name="start">Start</string>
     <string name="pause">Pause</string>
     <string name="stop">Stop</string>

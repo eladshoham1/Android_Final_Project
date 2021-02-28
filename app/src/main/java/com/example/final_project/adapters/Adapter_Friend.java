@@ -6,12 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_project.R;
-import com.example.final_project.callbacks.CallBack_UserPicture;
 import com.example.final_project.objects.User;
-import com.example.final_project.utils.MyDB;
 import com.example.final_project.utils.MySignal;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.imageview.ShapeableImageView;
@@ -40,15 +39,16 @@ public class Adapter_Friend extends RecyclerView.Adapter<Adapter_Friend.MyViewHo
     }
 
     // inflates the row layout from xml when needed
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.list_friends, parent, false);
         return new MyViewHolder(view);
     }
 
     // binds the data to the TextView in each row
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         User friend = friends.get(position);
         String pictureUrl = friend.getPictureUrl();
 

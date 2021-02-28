@@ -1,4 +1,4 @@
-package com.example.final_project.fragments.running;
+package com.example.final_project.fragments.achievements;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -70,5 +70,6 @@ public class Fragment_Runs_History extends Fragment {
         Intent myIntent = new Intent(getContext(), Activity_Run_Details.class);
         myIntent.putExtra(Constants.EXTRA_RUN_DETAILS, new Gson().toJson(run));
         startActivity(myIntent);
+        getActivity().finish();
     }
 }

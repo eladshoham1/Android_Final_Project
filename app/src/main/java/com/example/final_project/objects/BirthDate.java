@@ -19,27 +19,24 @@ public class BirthDate {
         return day;
     }
 
-    public BirthDate setDay(int day) {
+    public void setDay(int day) {
         this.day = day;
-        return this;
     }
 
     public int getMonth() {
         return month;
     }
 
-    public BirthDate setMonth(int month) {
+    public void setMonth(int month) {
         this.month = month;
-        return this;
     }
 
     public int getYear() {
         return year;
     }
 
-    public BirthDate setYear(int year) {
+    public void setYear(int year) {
         this.year = year;
-        return this;
     }
 
     public int getAge() {

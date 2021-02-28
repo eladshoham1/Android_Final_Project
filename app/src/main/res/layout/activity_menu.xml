@@ -6,10 +6,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.Activity_Menu"
     android:background="@color/white"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="start"
+    tools:context=".activities.Activity_Menu">
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/menu_NAV_navigationDrawer"

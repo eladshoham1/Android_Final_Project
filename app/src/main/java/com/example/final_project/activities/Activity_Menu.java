@@ -2,7 +2,6 @@ package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -13,17 +12,16 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.final_project.R;
-import com.example.final_project.fragments.user.Fragment_Achievements;
+import com.example.final_project.fragments.achievements.Fragment_Achievements;
 import com.example.final_project.fragments.friends.Fragment_Friends;
 import com.example.final_project.fragments.user.Fragment_Profile;
-import com.example.final_project.fragments.running.Fragment_Running;
 import com.example.final_project.utils.Constants;
 import com.example.final_project.utils.MySP;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Activity_Menu extends AppCompatActivity {
+public class Activity_Menu extends Activity_Base {
     private DrawerLayout menu_LAY_drawerLayout;
     private NavigationView menu_NAV_navigationDrawer;
     private BottomNavigationView menu_NVG_bottomNavigation;
@@ -34,6 +32,11 @@ public class Activity_Menu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
 
         findViews();
         initViews();
@@ -59,17 +62,33 @@ public class Activity_Menu extends AppCompatActivity {
     private void initViews() {
         setSupportActionBar(menu_TLB_toolbar);
 
-        if (getIntent().getBooleanExtra(Constants.EXTRA_GO_TO_ACHIEVEMENTS, false)) {
-            replaceFragment(R.id.menu_LBL_achievements);
-        } else {
-            replaceFragment(R.id.menu_LBL_profile);
+        int fragmentCode = getIntent().getIntExtra(Constants.EXTRA_GO_TO_ACTIVITY, Constants.PROFILE_CODE);
+        switch (fragmentCode) {
+            case Constants.PROFILE_CODE:
+                replaceFragment(R.id.menu_LBL_profile);
+                break;
+            case Constants.FRIENDS_CODE:
+                replaceFragment(R.id.menu_LBL_friends);
+                break;
+            case Constants.ACHIEVEMENTS_CODE:
+                replaceFragment(R.id.menu_LBL_achievements);
+                break;
         }
 
         menu_NVG_bottomNavigation.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                replaceFragment(item.getItemId());
-                return true;
+                boolean checkItem;
+
+                if (item.getItemId() == R.id.menu_LBL_running) {
+                    checkItem = false;
+                    openRunning();
+                } else {
+                    checkItem = true;
+                    replaceFragment(item.getItemId());
+                }
+
+                return checkItem;
             }
         });
     }
@@ -106,14 +125,22 @@ public class Activity_Menu extends AppCompatActivity {
         });
     }
 
+    private void openRunning() {
+        Intent myIntent = new Intent(this, Activity_Running.class);
+        startActivity(myIntent);
+        finish();
+    }
+
     private void openSettings() {
         Intent myIntent = new Intent(this, Activity_Settings.class);
         startActivity(myIntent);
+        finish();
     }
 
     private void openEditProfile() {
         Intent myIntent = new Intent(this, Activity_Edit_Profile.class);
         startActivity(myIntent);
+        finish();
     }
 
     private void logOut() {
@@ -136,10 +163,6 @@ public class Activity_Menu extends AppCompatActivity {
             case R.id.menu_LBL_friends:
                 itemId = R.id.menu_LBL_friends;
                 selectedFragment = new Fragment_Friends();
-                break;
-            case R.id.menu_LBL_running:
-                itemId = R.id.menu_LBL_running;
-                selectedFragment = new Fragment_Running();
                 break;
             case R.id.menu_LBL_achievements:
                 itemId = R.id.menu_LBL_achievements;

@@ -1,9 +1,9 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
@@ -20,7 +20,7 @@ import com.example.final_project.utils.MyStrings;
 
 import java.util.ArrayList;
 
-public class Activity_Compete_Friend extends AppCompatActivity {
+public class Activity_Compete_Friend extends Activity_Base {
     private ProgressBar compete_friend_PRG_numberOfRuns;
     private ProgressBar compete_friend_PRG_averageTime;
     private ProgressBar compete_friend_PRG_maxTime;
@@ -74,8 +74,13 @@ public class Activity_Compete_Friend extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
+        moveToFriends();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        moveToFriends();
     }
 
     private void findViews() {
@@ -370,5 +375,12 @@ public class Activity_Compete_Friend extends AppCompatActivity {
         } else {
             compete_friend_PRG_totalCalories.setProgress(Constants.EQUAL_PERCENTAGE);
         }
+    }
+
+    private void moveToFriends() {
+        Intent myIntent = new Intent(this, Activity_Menu.class);
+        myIntent.putExtra(Constants.EXTRA_GO_TO_ACTIVITY, Constants.FRIENDS_CODE);
+        startActivity(myIntent);
+        finish();
     }
 }

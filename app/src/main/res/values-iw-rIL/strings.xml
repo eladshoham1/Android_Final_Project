@@ -3,7 +3,6 @@
     <string name="internet_error_message">אין חיבור לאינטרנט</string>
     <string name="phone_number">מספר טלפון</string>
     <string name="enter_code">הכנס קוד</string>
-    <string name="ok_">אישור</string>
     <string name="continue_">המשך</string>
     <string name="login">התחבר</string>
 
@@ -73,7 +72,6 @@
     <string name="distance">מרחק (קמ)</string>
     <string name="speed">מהירות (קמש)</string>
     <string name="calories">קלוריות</string>
-    <string name="run">התחל</string>
     <string name="start">התחל</string>
     <string name="pause">השהה</string>
     <string name="stop">עצור</string>

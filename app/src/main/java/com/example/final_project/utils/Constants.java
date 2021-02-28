@@ -11,8 +11,13 @@ public class Constants {
     public static final String BUNDLE_USER_DETAILS = "BUNDLE_USER_DETAILS";
     public static final String EXTRA_RUN_DETAILS = "EXTRA_RUN_DETAILS";
     public static final String EXTRA_FRIEND_KEY = "EXTRA_FRIEND_KEY";
-    public static final String EXTRA_GO_TO_ACHIEVEMENTS = "EXTRA_GO_TO_ACHIEVEMENTS";
     public static final String EXTRA_OPEN_FROM_RUNNING = "EXTRA_OPEN_FROM_RUNNING";
+    public static final String EXTRA_GO_TO_ACTIVITY = "EXTRA_GO_TO_ACTIVITY";
+    public static final int PROFILE_CODE = 0;
+    public static final int FRIENDS_CODE = 1;
+    public static final int ACHIEVEMENTS_CODE = 2;
+
+    public static final int TAB_FRIENDS_REQUESTS = 1;
 
     public static final String IMAGES_FILES = "image/*";
     public static final String SELECT_PICTURE = "Select Picture";
@@ -33,7 +38,7 @@ public class Constants {
     public static final String IMAGES_DB = "images/";
 
     public static final int LOCATION_REQUEST_CODE = 1;
-    public static final int TIME_INTERVAL = 3000;
+    public static final int TIME_INTERVAL = 2500;
     public static final int TIME_FASTEST_INTERVAL = 1000;
     public static final String ACT_LOC = "ACT_LOC";
     public static final String LATITUDE = "LATITUDE";

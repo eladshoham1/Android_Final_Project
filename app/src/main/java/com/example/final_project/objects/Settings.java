@@ -21,45 +21,40 @@ public class Settings {
         return picture;
     }
 
-    public Settings setPicture(boolean picture) {
+    public void setPicture(boolean picture) {
         this.picture = picture;
-        return this;
     }
 
     public boolean isAge() {
         return age;
     }
 
-    public Settings setAge(boolean age) {
+    public void setAge(boolean age) {
         this.age = age;
-        return this;
     }
 
     public boolean isBmi() {
         return bmi;
     }
 
-    public Settings setBmi(boolean bmi) {
+    public void setBmi(boolean bmi) {
         this.bmi = bmi;
-        return this;
     }
 
     public boolean isHeight() {
         return height;
     }
 
-    public Settings setHeight(boolean height) {
+    public void setHeight(boolean height) {
         this.height = height;
-        return this;
     }
 
     public boolean isWeight() {
         return weight;
     }
 
-    public Settings setWeight(boolean weight) {
+    public void setWeight(boolean weight) {
         this.weight = weight;
-        return this;
     }
 
 }

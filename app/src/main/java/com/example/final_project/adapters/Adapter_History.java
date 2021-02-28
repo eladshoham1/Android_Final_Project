@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.final_project.R;
@@ -29,8 +30,9 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
     }
 
     // inflates the row layout from xml when needed
+    @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.list_running, parent, false);
         return new MyViewHolder(view);
     }
@@ -43,7 +45,7 @@ public class Adapter_History extends RecyclerView.Adapter<Adapter_History.MyView
 
         holder.history_LBL_date.setText(MyStrings.makeDateString(run.getStartTime()));
         holder.history_LBL_duration.setText(MyStrings.makeDurationString(run.getDuration()));
-        holder.history_LBL_distance.setText(MyStrings.twoDigitsAfterPoint(run.getDistance()) + " " + kmString);
+        holder.history_LBL_distance.setText(MyStrings.threeDigitsAfterPoint(run.getDistance()) + " " + kmString);
     }
 
     // total number of rows

@@ -32,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.Activity_Base" />
         <activity
             android:name=".activities.Activity_Login"
             android:launchMode="singleTask"
@@ -51,13 +52,20 @@
             android:launchMode="singleTask"
             android:screenOrientation="locked"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activities.Activity_Friend_Profile"
+        <activity
+            android:name=".activities.Activity_Running"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
-        <activity android:name=".activities.Activity_Settings"
+        <activity
+            android:name=".activities.Activity_Friend_Profile"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
-        <activity android:name=".activities.Activity_Compete_Friend"
+        <activity
+            android:name=".activities.Activity_Settings"
+            android:launchMode="singleTask"
+            android:screenOrientation="locked" />
+        <activity
+            android:name=".activities.Activity_Compete_Friend"
             android:launchMode="singleTask"
             android:screenOrientation="locked" />
 

@@ -1,7 +1,6 @@
 package com.example.final_project.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.os.Bundle;
@@ -17,7 +16,7 @@ import com.example.final_project.utils.MySignal;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
-public class Activity_Settings extends AppCompatActivity {
+public class Activity_Settings extends Activity_Base {
     private SwitchMaterial settings_SWT_sound;
     private SwitchMaterial settings_SWT_picture;
     private SwitchMaterial settings_SWT_age;
@@ -38,8 +37,13 @@ public class Activity_Settings extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        finish();
+        openMenuActivity();
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        openMenuActivity();
     }
 
     private void findViews() {
@@ -104,7 +108,7 @@ public class Activity_Settings extends AppCompatActivity {
 
         MySP.getInstance().putBoolean(MySP.KEYS.SOUND_ENABLE, settings_SWT_sound.isChecked());
         MyDB.updateSettings(settings);
-        finish();
+        openMenuActivity();
     }
 
 }
